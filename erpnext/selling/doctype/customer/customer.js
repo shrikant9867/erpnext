@@ -10,7 +10,7 @@ frappe.ui.form.on("Customer", "refresh", function(frm) {
 		erpnext.toggle_naming_series();
 	}
 
-	frm.toggle_display(['address_html','contact_html'], !frm.doc.__islocal);
+	frm.toggle_display(['address_html','contact_html','financial_details'], !frm.doc.__islocal);
 
 	if(!frm.doc.__islocal) {
 		erpnext.utils.render_address_and_contact(frm);
@@ -45,34 +45,45 @@ cur_frm.cscript.setup_dashboard = function(doc) {
 	cur_frm.dashboard.reset(doc);
 	if(doc.__islocal)
 		return;
-	if (in_list(user_roles, "Accounts User") || in_list(user_roles, "Accounts Manager"))
-		cur_frm.dashboard.set_headline('<span class="text-muted">'+ __('Loading...')+ '</span>')
 
-	cur_frm.dashboard.add_doctype_badge("Opportunity", "customer");
-	cur_frm.dashboard.add_doctype_badge("Quotation", "customer");
-	cur_frm.dashboard.add_doctype_badge("Sales Order", "customer");
-	cur_frm.dashboard.add_doctype_badge("Delivery Note", "customer");
-	cur_frm.dashboard.add_doctype_badge("Sales Invoice", "customer");
-	cur_frm.dashboard.add_doctype_badge("Project", "customer");
 
-	return frappe.call({
+
+	cur_frm.dashboard.add_doctype_badge("Financial Data", "customer");
+	cur_frm.dashboard.add_doctype_badge("FFWW", "customer");
+	cur_frm.dashboard.add_doctype_badge("Operational Matrix Details","customer");
+
+
+	frappe.call({
 		type: "GET",
-		method: "erpnext.selling.doctype.customer.customer.get_dashboard_info",
+		method: "erpnext.selling.doctype.customer.customer.get_customer_contact",
 		args: {
 			customer: cur_frm.doc.name
 		},
 		callback: function(r) {
-			if (in_list(user_roles, "Accounts User") || in_list(user_roles, "Accounts Manager")) {
-				cur_frm.dashboard.set_headline(
-					__("Total Billing This Year: ") + "<b>"
-					+ format_currency(r.message.billing_this_year, cur_frm.doc.party_account_currency)
-					+ '</b> / <span class="text-muted">' + __("Unpaid") + ": <b>"
-					+ format_currency(r.message.total_unpaid, cur_frm.doc.party_account_currency)
-					+ '</b></span>');
-			}
-			cur_frm.dashboard.set_badge_count(r.message);
+			//cur_frm.dashboard.add_page_badge("FFWW","FFWW",r.message['final_contact_list']);
+			
+			cur_frm.dashboard.add_doctype_badge("Project Commercial","customer");
+			console.log("in after dashbirad add")
+			frappe.call({
+				type: "GET",
+				method: "erpnext.selling.doctype.customer.customer.get_dashboard_info",
+				args: {
+					customer: cur_frm.doc.name
+				},
+				callback: function(r) {
+					cur_frm.dashboard.set_headline(
+								__("Other Details: ") + "<b>")
+					cur_frm.dashboard.set_badge_count(r.message);
+				}
+			});
+			cur_frm.dashboard.set_headline(
+						__("Other Details: ") + "<b>")
+			
 		}
+
 	});
+
+	
 }
 
 cur_frm.fields_dict['customer_group'].get_query = function(doc, dt, dn) {

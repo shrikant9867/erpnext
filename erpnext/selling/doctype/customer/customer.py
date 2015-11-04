@@ -55,6 +55,10 @@ class Customer(TransactionBase):
 		frappe.db.sql("""update `tabContact` set customer_name=%s, modified=NOW()
 			where customer=%s""", (self.customer_name, self.name))
 
+	# def update_financial_data(self):
+	# 	frappe.db.sql("""update `tabFinancial_Data` set customer_name=%s, modified=NOW()
+	# 		where customer=%s""", (self.customer_name, self.name))	
+
 	def create_lead_address_contact(self):
 		if self.lead_name:
 			if not frappe.db.get_value("Address", {"lead": self.lead_name, "customer": self.name}):
@@ -82,6 +86,7 @@ class Customer(TransactionBase):
 		self.update_lead_status()
 		self.update_address()
 		self.update_contact()
+		# self.update_financial_data()
 
 		if self.flags.is_new_doc:
 			self.create_lead_address_contact()
@@ -131,25 +136,11 @@ def get_dashboard_info(customer):
 		frappe.msgprint(_("Not permitted"), raise_exception=True)
 
 	out = {}
-	for doctype in ["Opportunity", "Quotation", "Sales Order", "Delivery Note",
-		"Sales Invoice", "Project"]:
+	for doctype in ["Financial Data","Contact","Operational Matrix","Project Commercial"]:
 		out[doctype] = frappe.db.get_value(doctype,
 			{"customer": customer, "docstatus": ["!=", 2] }, "count(*)")
 
-	billing_this_year = frappe.db.sql("""
-		select sum(ifnull(debit_in_account_currency, 0)) - sum(ifnull(credit_in_account_currency, 0))
-		from `tabGL Entry`
-		where voucher_type='Sales Invoice' and party_type = 'Customer'
-			and party=%s and fiscal_year = %s""",
-		(customer, frappe.db.get_default("fiscal_year")))
-
-	total_unpaid = frappe.db.sql("""select sum(outstanding_amount)
-		from `tabSales Invoice`
-		where customer=%s and docstatus = 1""", customer)
-
-	out["billing_this_year"] = billing_this_year[0][0] if billing_this_year else 0
-	out["total_unpaid"] = total_unpaid[0][0] if total_unpaid else 0
-
+	frappe.errprint(["outtt",out])
 	return out
 
 
@@ -235,3 +226,56 @@ def get_credit_limit(customer, company):
 			frappe.db.get_value("Company", company, "credit_limit")
 
 	return credit_limit
+
+
+@frappe.whitelist()
+def get_customer_contact(customer):
+	final_contact_list = []
+	#contact_list = frappe.db.get_value("Contact", {"customer":customer}, "name")
+	contact_list = frappe.db.sql("""select name from `tabContact` where customer='%s'"""%customer,as_list=1)
+
+	if len(contact_list)>0:
+		for i in contact_list:
+			contact = frappe.get_doc("Contact", i[0])
+			out = {
+				"contact_person": contact.get("name"),
+				"contact_display": " ".join(filter(None,
+					[contact.get("first_name"), contact.get("last_name")])),
+				"contact_email": contact.get("email_id"),
+				"contact_email_personal": contact.get("email_id_personal"),
+				"contact_mobile": contact.get("mobile_no"),
+				"contact_mobile_official": contact.get("mobile_no_official"),
+				"contact_phone": contact.get("phone"),
+				"contact_designation": contact.get("contact_designation"),
+				"customer": contact.get("customer")
+				
+			}
+			final_contact_list.append(out)
+
+	operationl_matrix_list = get_operational_matrix(customer)
+
+	return {'final_contact_list': final_contact_list,
+			'operationl_matrix_list': operationl_matrix_list}
+
+def get_operational_matrix(customer):
+	operationl_matrix_list = []
+	operational_list = frappe.db.sql("""select name from `tabOperational Matrix` where customer='%s'"""%customer,as_list=1)
+	
+	if len(operational_list)>0:
+		for i in operational_list:
+			om = frappe.get_doc("Operational Matrix", i[0])
+			out = {
+				"first_name": om.get("f_name"),
+				"Second_name": om.get("s_name"),
+				"email": om.get("email"),
+				"role": om.get("role"),
+				"contact": om.get("contact")	
+			}
+			operationl_matrix_list.append(out)
+
+		return operationl_matrix_list
+
+
+
+	
+	

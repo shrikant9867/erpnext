@@ -14,6 +14,8 @@
 		"public/js/utils/party.js",
 		"public/js/templates/address_list.html",
 		"public/js/templates/contact_list.html",
+		"public/js/templates/financial_data_list.html",
+		"public/js/templates/operational_matrix_list.html",
 		"public/js/pos/pos.html",
 		"public/js/pos/pos_bill_item.html",
 		"public/js/pos/pos_item.html",

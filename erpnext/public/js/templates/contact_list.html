@@ -4,7 +4,16 @@
 
 {% for(var i=0, l=contact_list.length; i<l; i++) { %}
     <p class="h6">
-        {%= i+1 %}. {%= contact_list[i].first_name %} {%= contact_list[i].last_name %}
+        <div class="row">
+        <div class="col-xs-12">
+            {%= i+1 %}.
+        </div>
+        </div>    
+        <div class="row">
+        <div class="col-xs-8">
+        <label>{%= __("Name") %}</label>: {%= contact_list[i].first_name %} {%= contact_list[i].last_name %}<br>
+        </div>
+        <div class="col-xs-4">
         {% if(contact_list[i].is_primary_contact) { %}
             <span class="text-muted">({%= __("Primary") %})</span>
         {% } %}
@@ -12,18 +21,40 @@
         <a href="#Form/Contact/{%= contact_list[i].name %}"
             class="btn btn-xs btn-default pull-right">
             {%= __("Edit") %}</a>
+        </div>    
     </p>
     <div style="padding-left: 15px;">
         <p style="padding-top: 5px; font-size: 12px;">
-        {% if(contact_list[i].phone) { %}
-            {%= __("Phone") %}: {%= contact_list[i].phone %}<br>
+        <div class="row">
+        <div class="col-xs-12">
+        {% if(contact_list[i].status) { %}
+        <label>{%= __("Status") %}</label>: {%= contact_list[i].status %}<br>
         {% } %}
-        {% if(contact_list[i].mobile_no) { %}
-            {%= __("Mobile No.") %}: {%= contact_list[i].mobile_no %}<br>
+        {% if(contact_list[i].phone) { %}
+        <label>{%= __("Landline") %}</label>: {%= contact_list[i].phone %}<br>
         {% } %}
         {% if(contact_list[i].email_id) { %}
-            {%= __("Email ID") %}: {%= contact_list[i].email_id %}
+        <label>{%= __("Email Id Offical") %}</label>: {%= contact_list[i].email_id %}<br>
         {% } %}
+        {% if(contact_list[i].email_id_personal) { %}
+        <label>{%= __("Email Id Personal ") %}</label>: {%= contact_list[i].email_id_personal %}<br>
+        {% } %}
+        {% if(contact_list[i].mobile_no) { %}
+        <label>{%= __("Mobile No. Personal") %}</label>: {%= contact_list[i].mobile_no %}<br>
+        {% } %}
+        {% if(contact_list[i].mobile_no_official) { %}
+        <label>{%= __("Mobile No. Official") %}</label>: {%= contact_list[i].mobile_no_official %}<br>
+        {% } %}
+        {% if(contact_list[i].linkedin_id) { %}
+        <label>{%= __("Linkedin Id") %}</label>: {%= contact_list[i].linkedin_id %}<br>
+        {% } %}
+        {% if(contact_list[i].skype_id) { %}
+        <label>{%= __("Skype Id") %}</label>: {%= contact_list[i].skype_id %}<br>
+        {% } %}
+        </div>
+        </div>
+        </div>
+        <hr>    
         </p>
     </div>
 {% } %}

@@ -101,13 +101,16 @@ $.extend(erpnext, {
 
 $.extend(erpnext.utils, {
 	render_address_and_contact: function(frm) {
-		// render address
-		$(frm.fields_dict['address_html'].wrapper)
-			.html(frappe.render_template("address_list",
-				cur_frm.doc.__onload))
-			.find(".btn-address").on("click", function() {
-				new_doc("Address");
-			});
+		if(frm.fields_dict['address_html']){
+
+			$(frm.fields_dict['address_html'].wrapper)
+				.html(frappe.render_template("address_list",
+					cur_frm.doc.__onload))
+				.find(".btn-address").on("click", function() {
+					new_doc("Address");
+				});
+
+		}
 
 		// render contact
 		if(frm.fields_dict['contact_html']) {
@@ -116,8 +119,16 @@ $.extend(erpnext.utils, {
 					cur_frm.doc.__onload))
 				.find(".btn-contact").on("click", function() {
 					new_doc("Contact");
-				}
-			);
+				});
+		}
+
+		if(frm.fields_dict['financial_details']) {
+			$(frm.fields_dict['financial_details'].wrapper)
+				.html(frappe.render_template("financial_data_list",
+					cur_frm.doc.__onload))
+				.find(".btn-financial").on("click", function() {
+					new_doc("Financial Data");
+				});
 		}
 	},
 
