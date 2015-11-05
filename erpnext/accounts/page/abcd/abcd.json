@@ -1,0 +1,21 @@
+{
+ "content": null, 
+ "creation": "2015-11-01 14:26:38.256918", 
+ "docstatus": 0, 
+ "doctype": "Page", 
+ "modified": "2015-11-01 14:26:38.256918", 
+ "modified_by": "Administrator", 
+ "module": "Accounts", 
+ "name": "abcd", 
+ "owner": "Administrator", 
+ "page_name": "ABCD", 
+ "roles": [
+  {
+   "role": "All"
+  }
+ ], 
+ "script": null, 
+ "standard": "Yes", 
+ "style": null, 
+ "title": "abcd"
+}

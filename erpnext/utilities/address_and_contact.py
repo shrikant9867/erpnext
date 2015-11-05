@@ -6,17 +6,37 @@ import frappe
 
 def load_address_and_contact(doc, key):
 	"""Loads address list and contact list in `__onload`"""
+	frappe.errprint(" innn load_address_and_contact")
+	if doc.doctype=='FFWW':
+		frappe.errprint(["load_address_and_contact",doc.get("__onload")])
+	else:
+		frappe.errprint(["load_address_and_contact1111",doc.get("__onload")])
 	from erpnext.utilities.doctype.address.address import get_address_display
 
 	doc.get("__onload").addr_list = [a.update({"display": get_address_display(a)}) \
 		for a in frappe.get_all("Address",
 			fields="*", filters={key: doc.name},
 			order_by="is_primary_address desc, modified desc")]
+	
 
 	if doc.doctype != "Lead":
 		doc.get("__onload").contact_list = frappe.get_all("Contact",
 			fields="*", filters={key: doc.name},
 			order_by="is_primary_contact desc, modified desc")
+	frappe.errprint(doc.get("__onload").contact_list)
+
+
+	if doc.doctype == "FFWW":
+		doc.get("__onload").contact_list = frappe.get_all("Contact",
+			fields="*", filters={key: doc.customer},
+			order_by="is_primary_contact desc, modified desc")
+	frappe.errprint(doc.get("__onload").contact_list)
+
+	if doc.doctype != "Lead":
+		fiscal_year = frappe.db.sql("""select value from `tabSingles` where doctype='Global Defaults' and field='current_fiscal_year'""",as_list=1)
+		if fiscal_year:
+			doc.get("__onload").financial_list = frappe.get_all("Financial Data",
+				fields="*", filters={key: doc.name,'financial_year':fiscal_year[0][0]})
 
 def has_permission(doc, ptype, user):
 	links = get_permitted_and_not_permitted_links(doc.doctype)

@@ -5,8 +5,10 @@ cur_frm.cscript.onload = function(doc, cdt, cdn) {
 	cur_frm.add_fetch('customer', 'customer_name', 'customer_name');
 	cur_frm.add_fetch('supplier', 'supplier_name', 'supplier_name');
 
-	cur_frm.fields_dict.customer.get_query = erpnext.queries.customer;
-	cur_frm.fields_dict.supplier.get_query = erpnext.queries.supplier;
+	if (doc.doctype!='Financial Data' &&  doc.doctype!='Operational Matrix'){
+		cur_frm.fields_dict.customer.get_query = erpnext.queries.customer;
+		cur_frm.fields_dict.supplier.get_query = erpnext.queries.supplier;
+	}
 
 	if(cur_frm.fields_dict.lead) {
 		cur_frm.fields_dict.lead.get_query = erpnext.queries.lead;
@@ -15,22 +17,33 @@ cur_frm.cscript.onload = function(doc, cdt, cdn) {
 
 	if(doc.__islocal) {
 		var last_route = frappe.route_history.slice(-2, -1)[0];
+		console.log(["last_route",last_route])
+		if(last_route=='FFWW'){
+			console.log(refdoc)
+			// if(cur_frm.doc.doctype==="Contact")
+			// 				cur_frm.set_value("customer", refdoc.customer || refdoc.name);
+			// 				cur_frm.set_value("customer_name", refdoc.customer_name);
+		}
 		if(last_route && last_route[0]==="Form") {
 			var doctype = last_route[1],
 				docname = last_route.slice(2).join("/");
-
 			if(["Customer", "Quotation", "Sales Order", "Sales Invoice", "Delivery Note",
 				"Installation Note", "Opportunity", "Warranty Claim", "Maintenance Visit",
-				"Maintenance Schedule"]
+				"Maintenance Schedule","FFWW","Operational Matrix Details"]
 				.indexOf(doctype)!==-1) {
 				var refdoc = frappe.get_doc(doctype, docname);
+			console.log(refdoc.doctype)
 				if((refdoc.doctype == "Quotation" && refdoc.quotation_to=="Customer") ||
 					(refdoc.doctype == "Opportunity" && refdoc.enquiry_from=="Customer") ||
 					!in_list(["Opportunity", "Quotation"], doctype)) {
+						console.log(["ddd",refdoc.doctype])
 						cur_frm.set_value("customer", refdoc.customer || refdoc.name);
 						cur_frm.set_value("customer_name", refdoc.customer_name);
 						if(cur_frm.doc.doctype==="Address")
 							cur_frm.set_value("address_title", cur_frm.doc.customer_name);
+						if(cur_frm.doc.doctype==="Financial Data")
+							cur_frm.set_value("customer", refdoc.customer || refdoc.name);
+							cur_frm.set_value("customer_name", refdoc.customer_name);
 				}
 			}
 			if(["Supplier", "Supplier Quotation", "Purchase Order", "Purchase Invoice", "Purchase Receipt"]

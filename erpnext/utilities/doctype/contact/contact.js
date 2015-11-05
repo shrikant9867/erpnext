@@ -3,6 +3,8 @@
 
 {% include 'controllers/js/contact_address_common.js' %};
 
+cur_frm.add_fetch('customer', 'customer_name', 'customer_name');
+
 cur_frm.email_field = "email_id";
 frappe.ui.form.on("Contact", {
 	refresh: function(frm) {

@@ -1,0 +1,116 @@
+<p><button class="btn btn-xs btn-default btn-financial">New Financial Data</button></p>
+<div class="clearfix"></div>
+{% for(var i=0, l=financial_list.length; i<l; i++) { %}
+	<p class="h6">
+        <!-- {% if(financial_list[i].fiscal_year) { %}
+            <span class="text-muted">({%= __("Current Year") %})</span>
+        {% } %}
+ -->
+        <a href="#Form/Financial Data/{%= financial_list[i].name %}"
+            class="btn btn-xs btn-default pull-right">
+            {%= __("Edit") %}</a>
+    </p>
+    <div style="padding-left: 15px;">
+        <p style="margin-top: 5px; font-size: 12px;">
+        <div class="row">
+            <div class="col-xs-4">
+        <br>    
+        <h4>Sales Details</h4>
+        <div class="row">
+            <div class="col-xs-8">
+        {% if(financial_list[i].financial_year) { %}
+        <label>{%= __("Financial Year") %}</label>: {%= financial_list[i].financial_year %}<br>
+        {% } %}
+        {% if(financial_list[i].annual_sales) { %}
+        <label>{%= __("Annual Sales") %}</label>: {%= financial_list[i].annual_sales %}<br>
+        {% } %}
+        {% if(financial_list[i].ebidta) { %}
+        <label>{%= __("EBIDTA") %}</label>: {%= financial_list[i].ebidta %}<br>
+        {% } %}
+        {% if(financial_list[i].is_pe_vc) { %}
+        <label>{%= __("IS PE/VC/Angel") %}</label>: {%= financial_list[i].is_pe_vc %}<br>
+        {% } %}
+        <!-- <br>
+        {% if(name_of_fund_list[i].name_of_fund){%- for row in doc.name_of_fund -%}
+        <label>{{ row.Name Of Fund }}</label>
+            {{ row.name_of_fund }}
+        {%- endfor -%} %} -->
+            </div>
+            <div class="col-xs-4">
+        {% if(financial_list[i].pbt) { %}
+        <label>{%= __("PBT") %}</label>: {%= financial_list[i].pbt %}<br>
+        {% } %}
+        {% if(financial_list[i].pat) { %}
+        <label>{%= __("PAT") %}</label>: {%= financial_list[i].pbt %}<br>
+        {% } %}
+            </div>
+            </div>
+        </div>    
+            <div class="col-xs-8">
+        <h4>Employee Details</h4>
+        <!-- {% if(financial_list[i].emp_financial_year) { %}
+        <label>{%= __("Financial Year") %}</label>: {%= financial_list[i].emp_financial_year %}
+        {% } %}
+        <br> -->
+        {% if(financial_list[i].annualised_cost_of_salary_of_all_emp_in_f_and_a) { %}
+        <label>{%= __("Annualised cost of salary of all employees in F and A department") %}</label>: {%= financial_list[i].annualised_cost_of_salary_of_all_emp_in_f_and_a %}<br>
+        {% } %}
+        
+<!--         {% if(financial_list[i].no_of_permanent_employee_on_rolls") { %}
+        {%= __("Number of permanent employees on rolls") %}: {%= financial_list[i].no_of_permanent_employee_on_rolls %}
+        {% } %} -->
+        {% if(financial_list[i].no_of_fully_qualified_cwas_or_mbas_in_f_and_a) { %}
+        <label>{%= __("Number of fully qualified Cas or CWAs or MBAs in F and A department") %}</label>: {%= financial_list[i].no_of_fully_qualified_cwas_or_mbas_in_f_and_a %}<br>
+        {% } %}
+        {% if(financial_list[i].no_of_permanent_emp_in_f_and_a) { %}
+        <label>{%= __("Number of permanent employees in F and A department") %}</label>: {%= financial_list[i].no_of_permanent_emp_in_f_and_a %}<br>
+        {% } %}
+            </div>
+        </div>    
+        <h4>Bank Details</h4>
+        <div class="row">
+            <div class="col-xs-4">
+        <!-- {% if(financial_list[i].bank_financial_year) { %}
+        <label>{%= __("Financial Year") %}</label>: {%= financial_list[i].bank_financial_year %}
+        {% } %}
+        <br> -->
+        {% if(financial_list[i].number_of_bank_payments) { %}
+        <label>{%= __("Number of bank payments") %}</label>: {%= financial_list[i].number_of_bank_payments %}<br>
+        {% } %}
+        {% if(financial_list[i].number_of_a_banker) { %}
+        <label>{%= __("Number Of Active Banker") %}</label>: {%= financial_list[i].number_of_a_banker %}<br>
+        {% } %}
+        {% if(financial_list[i].number_of_bank_receipts) { %}
+        <label>{%= __("Number Of Bank receipts") %}</label>: {%= financial_list[i].number_of_bank_receipts %}<br>
+        {% } %}
+        {% if(financial_list[i].outstanding_p_loan) { %}
+        <label>{%= __("Outstanding principal loan") %}</label>: {%= financial_list[i].outstanding_p_loan %}<br>
+        {% } %}
+        {% if(financial_list[i].number_of_invoices_raised) { %}
+        <label>{%= __("Number of invoices raised") %}</label>: {%= financial_list[i].number_of_invoices_raised %}<br>
+        {% } %}
+            </div>
+            <div class="col-xs-8">
+        {% if(financial_list[i].size_of_fund_based_limit) { %}
+        <label>{%= __("Size of fund based limits from all Banks") %}</label>: {%= financial_list[i].size_of_fund_based_limit %}<br>
+        {% } %}
+        {% if(financial_list[i].number_of_vendor_invoices_booked) { %}
+        <label>{%= __("Number of vendor invoices booked") %}</label>: {%= financial_list[i].number_of_vendor_invoices_booked %}<br>
+        {% } %}
+        {% if(financial_list[i].size_of_non_fund_based_limit) { %}
+        <label>{%= __("Size of non-fund based limits from all Banks") %}</label>: {%= financial_list[i].size_of_non_fund_based_limit %}<br>
+        {% } %}
+        {% if(financial_list[i].number_of_jvs_passed) { %}
+        <label>{%= __("Number of JVs passed") %}</label>: {%= financial_list[i].number_of_jvs_passed %}<br>
+        {% } %}
+        {% if(financial_list[i].fixed_assets_gross_block) { %}
+        <label>{%= __("Fixed Assets Gross Block") %}</label>: {%= financial_list[i].fixed_assets_gross_block %}
+        {% } %}
+            </div>
+        </div>   
+        </p>
+    </div>
+{% } %}
+{% if(!financial_list.length) { %}
+<p class="text-muted">{%= __("No financial data added yet.") %}</p>
+{% } %}        
