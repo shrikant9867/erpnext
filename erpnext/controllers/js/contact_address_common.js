@@ -5,7 +5,7 @@ cur_frm.cscript.onload = function(doc, cdt, cdn) {
 	cur_frm.add_fetch('customer', 'customer_name', 'customer_name');
 	cur_frm.add_fetch('supplier', 'supplier_name', 'supplier_name');
 
-	if (doc.doctype!='Financial Data' &&  doc.doctype!='Operational Matrix'){
+	if (doc.doctype!='Financial Data' &&  doc.doctype!='Operational Matrix' && doc.doctype!='FFWW'){
 		cur_frm.fields_dict.customer.get_query = erpnext.queries.customer;
 		cur_frm.fields_dict.supplier.get_query = erpnext.queries.supplier;
 	}
@@ -17,13 +17,6 @@ cur_frm.cscript.onload = function(doc, cdt, cdn) {
 
 	if(doc.__islocal) {
 		var last_route = frappe.route_history.slice(-2, -1)[0];
-		console.log(["last_route",last_route])
-		if(last_route=='FFWW'){
-			console.log(refdoc)
-			// if(cur_frm.doc.doctype==="Contact")
-			// 				cur_frm.set_value("customer", refdoc.customer || refdoc.name);
-			// 				cur_frm.set_value("customer_name", refdoc.customer_name);
-		}
 		if(last_route && last_route[0]==="Form") {
 			var doctype = last_route[1],
 				docname = last_route.slice(2).join("/");
