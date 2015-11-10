@@ -13,8 +13,25 @@
             {%= __("Edit") %}</a>
         </p>
     <div style="padding-left: 15px;">
-        <p style="margin-top: 5px; font-size: 12px;">
-            {%= addr_list[i].display %}</p>
+       <p style="padding-top: 5px; font-size: 14px;">
+            <!-- {%= addr_list[i].display %} -->
+            {% if(addr_list[i].address_line1) { %}
+             <label>{%= __("Address") %}</label>: {%= addr_list[i].address_line1 %}<br>
+            {% } %}
+            {% if(addr_list[i].address_line2) { %}
+             <label>{%= __("Address") %}</label>: {%= addr_list[i].address_line2 %}<br>
+            {% } %}
+            {% if(addr_list[i].city) { %}
+             <label>{%= __("City") %}</label>: {%= addr_list[i].city %}<br>
+            {% } %}
+            {% if(addr_list[i].state) { %}
+             <label>{%= __("State") %}</label>: {%= addr_list[i].state %}<br>
+            {% } %}
+            {% if(addr_list[i].country) { %}
+             <label>{%= __("Country") %}</label>: {%= addr_list[i].country %}<br>
+            {% } %}
+
+        </p>
     </div>
 {% } %}
 {% if(!addr_list.length) { %}

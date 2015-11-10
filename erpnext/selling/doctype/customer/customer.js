@@ -27,6 +27,29 @@ frappe.ui.form.on("Customer", "refresh", function(frm) {
 cur_frm.cscript.onload = function(doc, dt, dn) {
 	cur_frm.cscript.load_defaults(doc, dt, dn);
 }
+cur_frm.cscript.cin_number =  function(doc,cdt,cdn){
+	//alert("hi")
+	var reg = /^[a-zA-Z0-9_]*$/
+	if(reg.test(doc.cin_number) == false) {
+		msgprint('Cin number must be alphanumeric')
+	}
+
+	if(!doc.cin_number.length==21){
+		msgprint('Cin number must be consist of 21 digits')
+	}
+}
+
+cur_frm.cscript.pan_number =  function(doc,cdt,cdn){
+	//alert("hi")
+	var reg = /^[a-zA-Z0-9_]*$/
+	if(reg.test(doc.pan_number) == false) {
+		msgprint('Pan number must be alphanumeric')
+	}
+
+	if(!doc.pan_number.length==10){
+		msgprint('Pan number must be consist of 10 digits')
+	}
+}
 
 cur_frm.cscript.load_defaults = function(doc, dt, dn) {
 	doc = locals[doc.doctype][doc.name];
@@ -47,13 +70,24 @@ cur_frm.cscript.setup_dashboard = function(doc) {
 	cur_frm.dashboard.reset(doc);
 	if(doc.__islocal)
 		return;
+	var status = ''
+	frappe.call({
+		type: "GET",
+		method: "erpnext.selling.doctype.customer.customer.get_financial_data",
+		args: {
+			customer: cur_frm.doc.name
+		},
+		callback: function(r) {
+			console.log(["message",r.message['status']])
+			//console.log(["status",status])
+			cur_frm.dashboard.add_doctype_badge_ffww("Financial Data", "customer",r.message['status'])
+			cur_frm.dashboard.add_doctype_badge("FFWW", "customer");
+			cur_frm.dashboard.add_doctype_badge("Operational Matrix Details","customer");
+			cur_frm.dashboard.add_page_badge("Project Commercial","customer");
+		}
+	});
 
-
-
-	cur_frm.dashboard.add_doctype_badge("Financial Data", "customer");
-	cur_frm.dashboard.add_doctype_badge("FFWW", "customer");
-	cur_frm.dashboard.add_doctype_badge("Operational Matrix Details","customer");
-
+	
 
 	frappe.call({
 		type: "GET",
@@ -64,7 +98,7 @@ cur_frm.cscript.setup_dashboard = function(doc) {
 		callback: function(r) {
 			//cur_frm.dashboard.add_page_badge("FFWW","FFWW",r.message['final_contact_list']);
 			
-			cur_frm.dashboard.add_doctype_badge("Project Commercial","customer");
+			
 			console.log("in after dashbirad add")
 			frappe.call({
 				type: "GET",
@@ -120,5 +154,15 @@ cur_frm.fields_dict['accounts'].grid.get_field('account').get_query = function(d
 
 	return {
 		filters: filters
+	}
+}
+
+
+cur_frm.fields_dict['promoters_details'].grid.get_field('p_name').get_query = function(doc, cdt, cdn) {
+	return {
+		filters: {
+			
+			"contact_designation": 'Promoters'
+		}
 	}
 }

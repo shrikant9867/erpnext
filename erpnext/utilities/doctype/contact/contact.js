@@ -8,19 +8,28 @@ cur_frm.add_fetch('customer', 'customer_name', 'customer_name');
 cur_frm.email_field = "email_id";
 frappe.ui.form.on("Contact", {
 	refresh: function(frm) {
-		if(!frm.doc.user && !frm.is_new() && frm.perm[0].write) {
-			frm.add_custom_button(__("Invite as User"), function() {
-				frappe.call({
-					method: "erpnext.utilities.doctype.contact.contact.invite_user",
-					args: {
-						contact: frm.doc.name
-					},
-					callback: function(r) {
-						frm.set_value("user", r.message);
-					}
-				});
+		//var doc = this.frm.doc;
+		if(!frm.doc.__islocal) {
+			frm.add_custom_button(__("Create Address"), function() {
+				frappe.model.open_mapped_doc({
+					method: "erpnext.utilities.doctype.contact.contact.make_address",
+					frm: frm
+				})
 			});
 		}
+		// if(!frm.doc.user && !frm.is_new() && frm.perm[0].write) {
+		// 	frm.add_custom_button(__("Invite as User"), function() {
+		// 		frappe.call({
+		// 			method: "erpnext.utilities.doctype.contact.contact.invite_user",
+		// 			args: {
+		// 				contact: frm.doc.name
+		// 			},
+		// 			callback: function(r) {
+		// 				frm.set_value("user", r.message);
+		// 			}
+		// 		});
+		// 	});
+		// }
 	},
 	validate: function(frm) {
 		// clear linked customer / supplier / sales partner on saving...
@@ -31,3 +40,31 @@ frappe.ui.form.on("Contact", {
 		});
 	}
 });
+
+
+cur_frm.cscript.skype_id = function(doc,cdt,cdn){
+	var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+	if (reg.test(doc.skype_id) == false) 
+	{
+	    msgprint('Invalid Skype ID');
+	}
+}
+
+
+cur_frm.cscript.linkedin_id = function(doc,cdt,cdn){
+	var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+	if (reg.test(doc.linkedin_id) == false) 
+	{
+	    msgprint('Invalid linkedin ID');
+	}
+}
+
+
+cur_frm.cscript.email_id = function(doc,cdt,cdn){
+	var d = locals[cdt][cdn];
+	var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+	if (reg.test(d.email_id) == false) 
+	{
+	    msgprint('Invalid Email Address');
+	}
+}

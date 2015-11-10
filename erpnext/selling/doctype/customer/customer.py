@@ -42,6 +42,18 @@ class Customer(TransactionBase):
 	def validate(self):
 		self.flags.is_new_doc = self.is_new()
 		validate_party_accounts(self)
+		self.validate_promoters()
+
+
+	def validate_promoters(self):
+		promoters_list = []
+		if self.get('promoters_details'):
+			for d in self.get('promoters_details'):
+				if d.p_name not in promoters_list:
+					promoters_list.append(d.p_name)
+				else:
+					frappe.msgprint("No duplicate promoter name is allowed",raise_exception=1)
+					break
 
 	def update_lead_status(self):
 		if self.lead_name:
@@ -274,6 +286,21 @@ def get_operational_matrix(customer):
 			operationl_matrix_list.append(out)
 
 		return operationl_matrix_list
+
+
+@frappe.whitelist()
+def get_financial_data(customer):
+	fiscal_year = frappe.db.sql("""select value from `tabSingles` where doctype='Global Defaults' and field='current_fiscal_year'""",as_list=1)
+	frappe.errprint(fiscal_year)
+	if fiscal_year:
+		last_fiscal_year = frappe.db.sql("""select name from `tabFiscal Year` where name < '%s' order by name desc limit 1"""%fiscal_year[0][0],as_list=1,debug=1)
+		frappe.errprint(last_fiscal_year)
+		if last_fiscal_year:
+			frappe.errprint("last fiscal year")
+			if frappe.db.sql("""select name from `tabFinancial Data` where customer='%s' and financial_year='%s'"""%(customer,last_fiscal_year[0][0])):
+				return {"status":True}
+			else:
+				return {"status":False}
 
 
 

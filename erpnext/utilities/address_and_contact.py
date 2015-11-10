@@ -33,10 +33,8 @@ def load_address_and_contact(doc, key):
 	frappe.errprint(doc.get("__onload").contact_list)
 
 	if doc.doctype != "Lead":
-		fiscal_year = frappe.db.sql("""select value from `tabSingles` where doctype='Global Defaults' and field='current_fiscal_year'""",as_list=1)
-		if fiscal_year:
 			doc.get("__onload").financial_list = frappe.get_all("Financial Data",
-				fields="*", filters={key: doc.name,'financial_year':fiscal_year[0][0]})
+				fields="*", filters={key: doc.name},order_by="creation desc",limit_page_length=1)
 
 def has_permission(doc, ptype, user):
 	links = get_permitted_and_not_permitted_links(doc.doctype)

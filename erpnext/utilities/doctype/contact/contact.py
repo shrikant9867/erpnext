@@ -4,7 +4,7 @@
 from __future__ import unicode_literals
 import frappe
 from frappe.utils import cstr
-
+from frappe.model.mapper import get_mapped_doc
 from erpnext.controllers.status_updater import StatusUpdater
 
 class Contact(StatusUpdater):
@@ -72,6 +72,35 @@ def invite_user(contact):
 		}).insert(ignore_permissions = True)
 
 		return user.name
+
+@frappe.whitelist()
+def make_address(source_name, target_doc=None):
+	return _make_address(source_name, target_doc)
+
+def _make_address(source_name, target_doc=None, ignore_permissions=False):
+	def set_missing_values(source, target):
+		pass
+		# if source.company_name:
+		# 	target.customer_type = "Company"
+		# 	target.customer_name = source.company_name
+		# else:
+		# 	target.customer_type = "Individual"
+		# 	target.customer_name = source.lead_name
+
+		# target.customer_group = frappe.db.get_default("customer_group")
+
+	doclist = get_mapped_doc("Contact", source_name,
+		{"Contact": {
+			"doctype": "Address",
+			"field_map": {
+				"contact": "name"
+				# "company_name": "customer_name",
+				# "contact_no": "phone_1",
+				# "fax": "fax_1"
+			}
+		}}, target_doc, set_missing_values, ignore_permissions=ignore_permissions)
+
+	return doclist
 
 @frappe.whitelist()
 def get_contact_details(contact):
