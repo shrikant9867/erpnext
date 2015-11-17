@@ -34,7 +34,7 @@ cur_frm.cscript.cin_number =  function(doc,cdt,cdn){
 		msgprint('Cin number must be alphanumeric')
 	}
 
-	if(!doc.cin_number.length==21){
+	if(doc.cin_number.length!=21){
 		msgprint('Cin number must be consist of 21 digits')
 	}
 }
@@ -46,7 +46,7 @@ cur_frm.cscript.pan_number =  function(doc,cdt,cdn){
 		msgprint('Pan number must be alphanumeric')
 	}
 
-	if(!doc.pan_number.length==10){
+	if(doc.pan_number.length!=10){
 		msgprint('Pan number must be consist of 10 digits')
 	}
 }
