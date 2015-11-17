@@ -5,9 +5,19 @@ cur_frm.cscript.onload = function(doc, cdt, cdn) {
 	cur_frm.add_fetch('customer', 'customer_name', 'customer_name');
 	cur_frm.add_fetch('supplier', 'supplier_name', 'supplier_name');
 
-	if (doc.doctype!='Financial Data' &&  doc.doctype!='Operational Matrix' && doc.doctype!='FFWW'){
+	if (doc.doctype!='Financial Data' &&  doc.doctype!='Operational Matrix' && doc.doctype!='FFWW' && doc.doctype!='Project Commercial'){
 		cur_frm.fields_dict.customer.get_query = erpnext.queries.customer;
 		cur_frm.fields_dict.supplier.get_query = erpnext.queries.supplier;
+	}
+
+	if(cur_frm.doc.doctype==="Operational Matrix"){
+		cur_frm.set_value("customer", $('input[data-fieldname=customer_nm]').val());
+		cur_frm.set_value("customer_name", $('input[data-fieldname=customer_nm]').val());
+	}
+
+	if(cur_frm.doc.doctype==="Project Commercial"){
+		cur_frm.set_value("customer", $('input[data-fieldname=customer_nm]').val());
+		cur_frm.set_value("customer_name", $('input[data-fieldname=customer_nm]').val());
 	}
 
 	if(cur_frm.fields_dict.lead) {
@@ -22,14 +32,13 @@ cur_frm.cscript.onload = function(doc, cdt, cdn) {
 				docname = last_route.slice(2).join("/");
 			if(["Customer", "Quotation", "Sales Order", "Sales Invoice", "Delivery Note",
 				"Installation Note", "Opportunity", "Warranty Claim", "Maintenance Visit",
-				"Maintenance Schedule","FFWW","Operational Matrix Details"]
+				"Maintenance Schedule","FFWW","Operational Matrix Details","Operational Matrix"]
 				.indexOf(doctype)!==-1) {
 				var refdoc = frappe.get_doc(doctype, docname);
-			console.log(refdoc.doctype)
+				console.log(refdoc)
 				if((refdoc.doctype == "Quotation" && refdoc.quotation_to=="Customer") ||
 					(refdoc.doctype == "Opportunity" && refdoc.enquiry_from=="Customer") ||
 					!in_list(["Opportunity", "Quotation"], doctype)) {
-						console.log(["ddd",refdoc.doctype])
 						cur_frm.set_value("customer", refdoc.customer || refdoc.name);
 						cur_frm.set_value("customer_name", refdoc.customer_name);
 						if(cur_frm.doc.doctype==="Address")
@@ -37,6 +46,11 @@ cur_frm.cscript.onload = function(doc, cdt, cdn) {
 						if(cur_frm.doc.doctype==="Financial Data")
 							cur_frm.set_value("customer", refdoc.customer || refdoc.name);
 							cur_frm.set_value("customer_name", refdoc.customer_name);
+						// if(cur_frm.doc.doctype==="Operational Matrix")
+						// 	console.log("in Operational Matrix")
+						// 	console.log($('input[data-fieldname=customer_nm]').val())
+						// 	cur_frm.set_value("customer", $('input[data-fieldname=customer_nm]').val());
+							//cur_frm.set_value("customer_name", refdoc.customer_name);
 				}
 			}
 			if(["Supplier", "Supplier Quotation", "Purchase Order", "Purchase Invoice", "Purchase Receipt"]

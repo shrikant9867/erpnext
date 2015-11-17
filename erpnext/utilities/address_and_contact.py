@@ -6,11 +6,6 @@ import frappe
 
 def load_address_and_contact(doc, key):
 	"""Loads address list and contact list in `__onload`"""
-	frappe.errprint(" innn load_address_and_contact")
-	if doc.doctype=='FFWW':
-		frappe.errprint(["load_address_and_contact",doc.get("__onload")])
-	else:
-		frappe.errprint(["load_address_and_contact1111",doc.get("__onload")])
 	from erpnext.utilities.doctype.address.address import get_address_display
 
 	doc.get("__onload").addr_list = [a.update({"display": get_address_display(a)}) \
@@ -23,15 +18,13 @@ def load_address_and_contact(doc, key):
 		doc.get("__onload").contact_list = frappe.get_all("Contact",
 			fields="*", filters={key: doc.name},
 			order_by="is_primary_contact desc, modified desc")
-	frappe.errprint(doc.get("__onload").contact_list)
 
 
 	if doc.doctype == "FFWW":
 		doc.get("__onload").contact_list = frappe.get_all("Contact",
 			fields="*", filters={key: doc.customer},
 			order_by="is_primary_contact desc, modified desc")
-	frappe.errprint(doc.get("__onload").contact_list)
-
+	
 	if doc.doctype != "Lead":
 			doc.get("__onload").financial_list = frappe.get_all("Financial Data",
 				fields="*", filters={key: doc.name},order_by="creation desc",limit_page_length=1)

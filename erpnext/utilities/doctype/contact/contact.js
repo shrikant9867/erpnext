@@ -68,3 +68,11 @@ cur_frm.cscript.email_id = function(doc,cdt,cdn){
 	    msgprint('Invalid Email Address');
 	}
 }
+
+cur_frm.cscript.mobile_no = function(doc,cdt,cdn){
+	var d = locals[cdt][cdn];
+	if (d.mobile_no.length!=10) 
+	{
+	    msgprint('Mobile Number must be 10 digits');
+	}
+}

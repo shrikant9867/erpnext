@@ -67,10 +67,6 @@ class Customer(TransactionBase):
 		frappe.db.sql("""update `tabContact` set customer_name=%s, modified=NOW()
 			where customer=%s""", (self.customer_name, self.name))
 
-	# def update_financial_data(self):
-	# 	frappe.db.sql("""update `tabFinancial_Data` set customer_name=%s, modified=NOW()
-	# 		where customer=%s""", (self.customer_name, self.name))	
-
 	def create_lead_address_contact(self):
 		if self.lead_name:
 			if not frappe.db.get_value("Address", {"lead": self.lead_name, "customer": self.name}):
@@ -152,7 +148,6 @@ def get_dashboard_info(customer):
 		out[doctype] = frappe.db.get_value(doctype,
 			{"customer": customer, "docstatus": ["!=", 2] }, "count(*)")
 
-	frappe.errprint(["outtt",out])
 	return out
 
 
@@ -291,12 +286,9 @@ def get_operational_matrix(customer):
 @frappe.whitelist()
 def get_financial_data(customer):
 	fiscal_year = frappe.db.sql("""select value from `tabSingles` where doctype='Global Defaults' and field='current_fiscal_year'""",as_list=1)
-	frappe.errprint(fiscal_year)
 	if fiscal_year:
-		last_fiscal_year = frappe.db.sql("""select name from `tabFiscal Year` where name < '%s' order by name desc limit 1"""%fiscal_year[0][0],as_list=1,debug=1)
-		frappe.errprint(last_fiscal_year)
+		last_fiscal_year = frappe.db.sql("""select name from `tabFiscal Year` where name < '%s' order by name desc limit 1"""%fiscal_year[0][0],as_list=1)
 		if last_fiscal_year:
-			frappe.errprint("last fiscal year")
 			if frappe.db.sql("""select name from `tabFinancial Data` where customer='%s' and financial_year='%s'"""%(customer,last_fiscal_year[0][0])):
 				return {"status":True}
 			else:

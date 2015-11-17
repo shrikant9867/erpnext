@@ -78,11 +78,10 @@ cur_frm.cscript.setup_dashboard = function(doc) {
 			customer: cur_frm.doc.name
 		},
 		callback: function(r) {
-			console.log(["message",r.message['status']])
-			//console.log(["status",status])
 			cur_frm.dashboard.add_doctype_badge_ffww("Financial Data", "customer",r.message['status'])
 			cur_frm.dashboard.add_doctype_badge("FFWW", "customer");
-			cur_frm.dashboard.add_doctype_badge("Operational Matrix Details","customer");
+			//cur_frm.dashboard.add_doctype_badge("Operational Matrix Details","customer");
+			cur_frm.dashboard.add_page_badge("Operational Matrix","customer");
 			cur_frm.dashboard.add_page_badge("Project Commercial","customer");
 		}
 	});
@@ -96,10 +95,6 @@ cur_frm.cscript.setup_dashboard = function(doc) {
 			customer: cur_frm.doc.name
 		},
 		callback: function(r) {
-			//cur_frm.dashboard.add_page_badge("FFWW","FFWW",r.message['final_contact_list']);
-			
-			
-			console.log("in after dashbirad add")
 			frappe.call({
 				type: "GET",
 				method: "erpnext.selling.doctype.customer.customer.get_dashboard_info",
