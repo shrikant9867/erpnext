@@ -86,7 +86,7 @@ cur_frm.cscript.setup_dashboard = function(doc) {
 		},
 		callback: function(r) {
 			cur_frm.dashboard.add_doctype_badge("Financial Data", "customer");
-			cur_frm.dashboard.add_doctype_badge("FFWW", "customer");
+			//cur_frm.dashboard.add_doctype_badge("FFWW", "customer");
 			//cur_frm.dashboard.add_doctype_badge("Operational Matrix Details","customer");
 			cur_frm.dashboard.add_page_badge("Operational Matrix","customer");
 			cur_frm.dashboard.add_page_badge("Project Commercial","customer");
@@ -171,8 +171,6 @@ cur_frm.fields_dict['promoters_details'].grid.get_field('p_name').get_query = fu
 
 cur_frm.cscript.date_of_incorporation = function(doc,cdt,cdn){
 	var today = new Date();
-	console.log(today)
-	console.log(new Date(doc.date_of_incorporation))
 	if(today<new Date(doc.date_of_incorporation)){
 		msgprint("Date of incorporation must be less than the future date")
 		doc.date_of_incorporation=''
