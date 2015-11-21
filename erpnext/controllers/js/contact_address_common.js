@@ -27,7 +27,7 @@ cur_frm.cscript.onload = function(doc, cdt, cdn) {
 				docname = last_route.slice(2).join("/");
 			if(["Customer", "Quotation", "Sales Order", "Sales Invoice", "Delivery Note",
 				"Installation Note", "Opportunity", "Warranty Claim", "Maintenance Visit",
-				"Maintenance Schedule","FFWW"]
+				"Maintenance Schedule","FFWW","Project Commercial"]
 				.indexOf(doctype)!==-1) {
 				var refdoc = frappe.get_doc(doctype, docname);
 				if((refdoc.doctype == "Quotation" && refdoc.quotation_to=="Customer") ||
