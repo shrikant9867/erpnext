@@ -28,26 +28,33 @@ cur_frm.cscript.onload = function(doc, dt, dn) {
 	cur_frm.cscript.load_defaults(doc, dt, dn);
 }
 cur_frm.cscript.cin_number =  function(doc,cdt,cdn){
-	//alert("hi")
+	var isnum = /^\d+$/.test(doc.cin_number);
+	
 	var reg = /^[a-zA-Z0-9_]*$/
 	if(reg.test(doc.cin_number) == false) {
-		msgprint('Cin number must be alphanumeric')
+		msgprint('CIN number must be Alphanumeric')
 	}
 
 	if(doc.cin_number.length!=21){
-		msgprint('Cin number must be consist of 21 digits')
+		msgprint('CIN number must be consist of 21 digits')
+	}
+	if(isnum==true){
+		msgprint('CIN number must be combination of digits and characters')
 	}
 }
 
 cur_frm.cscript.pan_number =  function(doc,cdt,cdn){
-	//alert("hi")
+	var isnum = /^\d+$/.test(doc.cin_number);
 	var reg = /^[a-zA-Z0-9_]*$/
 	if(reg.test(doc.pan_number) == false) {
-		msgprint('Pan number must be alphanumeric')
+		msgprint('PAN number must be alphanumeric')
 	}
 
 	if(doc.pan_number.length!=10){
-		msgprint('Pan number must be consist of 10 digits')
+		msgprint('PAN number must be consist of 10 digits')
+	}
+	if(isnum==true){
+		msgprint('PAN number must be combination of digits and characters')
 	}
 }
 
@@ -157,7 +164,30 @@ cur_frm.fields_dict['promoters_details'].grid.get_field('p_name').get_query = fu
 	return {
 		filters: {
 			
-			"contact_designation": 'Promoters'
+			"contact_designation": 'Promoter'
 		}
+	}
+}
+
+cur_frm.cscript.date_of_incorporation = function(doc,cdt,cdn){
+	var today = new Date();
+	console.log(today)
+	console.log(new Date(doc.date_of_incorporation))
+	if(today<new Date(doc.date_of_incorporation)){
+		msgprint("Date of incorporation must be less than the future date")
+		doc.date_of_incorporation=''
+		refresh_field('date_of_incorporation')
+	}
+}
+
+cur_frm.cscript.promoters_percentage = function(doc,cdt,cdn){
+	var d = locals[cdt][cdn]
+	if(d.promoters_percentage>0 && d.promoters_percentage<=100){
+		console.log("hi")
+	}
+	else{
+		msgprint("Percentage value must be less than 100%")
+		d.promoters_percentage=''
+		refresh_field('promoters_details')
 	}
 }

@@ -33,9 +33,12 @@
         <label>{{ row.Name Of Fund }}</label>
             {{ row.name_of_fund }}
         {%- endfor -%} %} -->
+        {% if(financial_list[i].outstanding_p_loan) { %}
         </div>    
             <div class="col-xs-6">
         <h4>Bank Details</h4>
+
+        {% } %}
         <!-- {% if(financial_list[i].emp_financial_year) { %}
         <label>{%= __("Financial Year") %}</label>: {%= financial_list[i].emp_financial_year %}
         {% } %}

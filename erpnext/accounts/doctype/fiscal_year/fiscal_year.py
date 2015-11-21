@@ -24,18 +24,29 @@ class FiscalYear(Document):
 			from `tabFiscal Year` where name=%s""", (self.name))
 
 		self.validate_dates()
+		self.validate_name()
 
 		if year_start_end_dates:
 			if getdate(self.year_start_date) != year_start_end_dates[0][0] or getdate(self.year_end_date) != year_start_end_dates[0][1]:
 				frappe.throw(_("Cannot change Fiscal Year Start Date and Fiscal Year End Date once the Fiscal Year is saved."))
 
 	def validate_dates(self):
+		frappe.errprint("validate dates")
 		if getdate(self.year_start_date) > getdate(self.year_end_date):
 			frappe.throw(_("Fiscal Year Start Date should not be greater than Fiscal Year End Date"))
 
 		if (getdate(self.year_end_date) - getdate(self.year_start_date)).days > 366:
 			date = getdate(self.year_start_date) + relativedelta(years=1) - relativedelta(days=1)
 			self.year_end_date = date.strftime("%Y-%m-%d")
+
+	def validate_name(self):
+		start_date = getdate(self.year_start_date)
+		end_date = getdate(self.year_end_date)
+		start_year = start_date.year
+		end_year = end_date.year
+		if not cstr(self.name).strip() == (cstr(start_year) +'-' + cstr(end_year)):
+			frappe.msgprint("Year name format is year from start date and year from end date like %s"%(cstr(start_year) +'-' + cstr(end_year)),raise_exception=1)#'%s'"%(start_year +'-' + end_year))
+
 
 	def on_update(self):
 		check_duplicate_fiscal_year(self)

@@ -10,11 +10,6 @@ cur_frm.cscript.onload = function(doc, cdt, cdn) {
 		cur_frm.fields_dict.supplier.get_query = erpnext.queries.supplier;
 	}
 
-	if(cur_frm.doc.doctype==="Operational Matrix"){
-		cur_frm.set_value("customer", $('input[data-fieldname=customer_nm]').val());
-		cur_frm.set_value("customer_name", $('input[data-fieldname=customer_nm]').val());
-	}
-
 	if(cur_frm.doc.doctype==="Project Commercial"){
 		cur_frm.set_value("customer", $('input[data-fieldname=customer_nm]').val());
 		cur_frm.set_value("customer_name", $('input[data-fieldname=customer_nm]').val());
@@ -32,10 +27,9 @@ cur_frm.cscript.onload = function(doc, cdt, cdn) {
 				docname = last_route.slice(2).join("/");
 			if(["Customer", "Quotation", "Sales Order", "Sales Invoice", "Delivery Note",
 				"Installation Note", "Opportunity", "Warranty Claim", "Maintenance Visit",
-				"Maintenance Schedule","FFWW","Operational Matrix Details","Operational Matrix"]
+				"Maintenance Schedule","FFWW"]
 				.indexOf(doctype)!==-1) {
 				var refdoc = frappe.get_doc(doctype, docname);
-				console.log(refdoc)
 				if((refdoc.doctype == "Quotation" && refdoc.quotation_to=="Customer") ||
 					(refdoc.doctype == "Opportunity" && refdoc.enquiry_from=="Customer") ||
 					!in_list(["Opportunity", "Quotation"], doctype)) {

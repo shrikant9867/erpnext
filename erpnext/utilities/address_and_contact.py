@@ -27,7 +27,7 @@ def load_address_and_contact(doc, key):
 	
 	if doc.doctype != "Lead":
 			doc.get("__onload").financial_list = frappe.get_all("Financial Data",
-				fields="*", filters={key: doc.name},order_by="creation desc",limit_page_length=1)
+				fields="*", filters={key: doc.name},order_by="financial_year desc",limit_page_length=1)
 
 def has_permission(doc, ptype, user):
 	links = get_permitted_and_not_permitted_links(doc.doctype)
