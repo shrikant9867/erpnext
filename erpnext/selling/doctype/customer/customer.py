@@ -167,8 +167,8 @@ def get_dashboard_info(customer):
 	out = {}
 	for doctype in ["Financial Data","Contact","Operational Matrix","Project Commercial"]:
 		if doctype == 'Operational Matrix':
-			out[doctype] = frappe.db.get_value(doctype,
-			{"docstatus": ["!=", 2] }, "count(*)")
+			out[doctype] = frappe.db.get_value('Operation And Project Commercial',
+			{"docstatus": ["!=", 2],"customer":customer,"operational_matrix_status":'Active' }, "count(*)")
 		else:
 			out[doctype] = frappe.db.get_value(doctype,
 				{"customer": customer, "docstatus": ["!=", 2] }, "count(*)")
