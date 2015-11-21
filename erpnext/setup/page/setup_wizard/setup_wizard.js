@@ -575,7 +575,6 @@ $.extend(erpnext.wiz, {
 							label:__("Contact Name") + " " + i, placeholder:__("Contact Name")}
 					])
 				}
-				slide.fields[1].reqd = 1;
 			},
 			css_class: "two-column"
 		},
@@ -599,7 +598,6 @@ $.extend(erpnext.wiz, {
 							label:__("Contact Name") + " " + i, placeholder:__("Contact Name")},
 					])
 				}
-				slide.fields[1].reqd = 1;
 			},
 			css_class: "two-column"
 		},
@@ -633,7 +631,6 @@ $.extend(erpnext.wiz, {
 						{fieldtype:"Attach Image", fieldname:"item_img_" + i, label:__("Attach Image")},
 					])
 				}
-				slide.fields[1].reqd = 1;
 
 				// dummy data
 				slide.fields.push({fieldtype: "Section Break"});

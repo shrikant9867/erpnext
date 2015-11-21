@@ -19,6 +19,16 @@ class Customer(TransactionBase):
 	def onload(self):
 		"""Load address and contacts in `__onload`"""
 		load_address_and_contact(self, "customer")
+		self.get_financial_data()
+
+	def get_financial_data(self):
+		fiscal_year = frappe.db.sql("""select value from `tabSingles` where doctype='Global Defaults' and field='current_fiscal_year'""",as_list=1)
+		if fiscal_year:
+			last_fiscal_year = frappe.db.sql("""select name from `tabFiscal Year` where name < '%s' order by name desc limit 1"""%fiscal_year[0][0],as_list=1)
+			if last_fiscal_year:
+				if not frappe.db.sql("""select name from `tabFinancial Data` where customer='%s' and financial_year='%s'"""%(self.name,last_fiscal_year[0][0])):
+					frappe.msgprint("Financial data is not updated")
+
 
 	def autoname(self):
 		cust_master_name = frappe.defaults.get_global_default('cust_master_name')
@@ -43,7 +53,18 @@ class Customer(TransactionBase):
 		self.flags.is_new_doc = self.is_new()
 		validate_party_accounts(self)
 		self.validate_promoters()
+		self.validate_cin()
+		self.validate_pan()
 
+	def validate_cin(self):
+		if frappe.db.sql("""select name from `tabCustomer` where name!='%s' and cin_number='%s'"""%(self.name,self.cin_number)):
+			name = frappe.db.sql("""select name from `tabCustomer` where name!='%s' and cin_number='%s'"""%(self.name,self.cin_number),as_list=1)
+			frappe.msgprint("CIN number '%s' is already linked with customer '%s' "%(self.cin_number,name[0][0]),raise_exception=1)
+
+	def validate_pan(self):
+		if frappe.db.sql("""select name from `tabCustomer` where name!='%s' and pan_number='%s'"""%(self.name,self.pan_number)):
+			name = frappe.db.sql("""select name from `tabCustomer` where name!='%s' and pan_number='%s'"""%(self.name,self.pan_number),as_list=1)
+			frappe.msgprint("PAN number '%s' is already linked with customer '%s' "%(self.pan_number,name[0][0]),raise_exception=1)
 
 	def validate_promoters(self):
 		promoters_list = []
@@ -52,7 +73,7 @@ class Customer(TransactionBase):
 				if d.p_name not in promoters_list:
 					promoters_list.append(d.p_name)
 				else:
-					frappe.msgprint("No duplicate promoter name is allowed",raise_exception=1)
+					frappe.msgprint("Duplicate promoter name is not allowed",raise_exception=1)
 					break
 
 	def update_lead_status(self):
@@ -145,8 +166,12 @@ def get_dashboard_info(customer):
 
 	out = {}
 	for doctype in ["Financial Data","Contact","Operational Matrix","Project Commercial"]:
-		out[doctype] = frappe.db.get_value(doctype,
-			{"customer": customer, "docstatus": ["!=", 2] }, "count(*)")
+		if doctype == 'Operational Matrix':
+			out[doctype] = frappe.db.get_value(doctype,
+			{"docstatus": ["!=", 2] }, "count(*)")
+		else:
+			out[doctype] = frappe.db.get_value(doctype,
+				{"customer": customer, "docstatus": ["!=", 2] }, "count(*)")
 
 	return out
 
