@@ -40,11 +40,6 @@ cur_frm.cscript.onload = function(doc, cdt, cdn) {
 						if(cur_frm.doc.doctype==="Financial Data")
 							cur_frm.set_value("customer", refdoc.customer || refdoc.name);
 							cur_frm.set_value("customer_name", refdoc.customer_name);
-						// if(cur_frm.doc.doctype==="Operational Matrix")
-						// 	console.log("in Operational Matrix")
-						// 	console.log($('input[data-fieldname=customer_nm]').val())
-						// 	cur_frm.set_value("customer", $('input[data-fieldname=customer_nm]').val());
-							//cur_frm.set_value("customer_name", refdoc.customer_name);
 				}
 			}
 			if(["Supplier", "Supplier Quotation", "Purchase Order", "Purchase Invoice", "Purchase Receipt"]

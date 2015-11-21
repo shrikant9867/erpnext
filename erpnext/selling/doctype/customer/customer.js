@@ -85,7 +85,7 @@ cur_frm.cscript.setup_dashboard = function(doc) {
 			customer: cur_frm.doc.name
 		},
 		callback: function(r) {
-			cur_frm.dashboard.add_doctype_badge_ffww("Financial Data", "customer",r.message['status'])
+			cur_frm.dashboard.add_doctype_badge("Financial Data", "customer");
 			cur_frm.dashboard.add_doctype_badge("FFWW", "customer");
 			//cur_frm.dashboard.add_doctype_badge("Operational Matrix Details","customer");
 			cur_frm.dashboard.add_page_badge("Operational Matrix","customer");

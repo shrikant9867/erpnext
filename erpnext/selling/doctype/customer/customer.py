@@ -25,8 +25,6 @@ class Customer(TransactionBase):
 		fiscal_year = frappe.db.sql("""select value from `tabSingles` where doctype='Global Defaults' and field='current_fiscal_year'""",as_list=1)
 		if fiscal_year:
 			last_fiscal_year = frappe.db.sql("""select name from `tabFiscal Year` where name < '%s' order by name desc limit 1"""%fiscal_year[0][0],as_list=1)
-			frappe.errprint("last_fiscal_year")
-			frappe.errprint(last_fiscal_year)
 			if last_fiscal_year:
 				if not frappe.db.sql("""select name from `tabFinancial Data` where customer='%s' and financial_year='%s'"""%(self.name,last_fiscal_year[0][0])):
 					frappe.msgprint("Financial data is not updated")
