@@ -25,6 +25,7 @@ class FiscalYear(Document):
 
 		self.validate_dates()
 		self.validate_name()
+		self.validate_company()
 
 		if year_start_end_dates:
 			if getdate(self.year_start_date) != year_start_end_dates[0][0] or getdate(self.year_end_date) != year_start_end_dates[0][1]:
@@ -45,6 +46,17 @@ class FiscalYear(Document):
 		end_year = end_date.year
 		if not cstr(self.name).strip() == (cstr(start_year) +'-' + cstr(end_year)):
 			frappe.msgprint("Year name format is year from start date and year from end date like %s"%(cstr(start_year) +'-' + cstr(end_year)),raise_exception=1)#'%s'"%(start_year +'-' + end_year))
+
+	def validate_company(self):
+		pass 
+		company_list = []
+		if self.get('companies'):
+			for d in self.get('companies'):
+				if d.company not in company_list:
+					company_list.append(d.company)
+				else:
+					frappe.msgprint("Duplicate company name is not allowed in company child table",raise_exception=1)
+					break
 
 
 	def on_update(self):

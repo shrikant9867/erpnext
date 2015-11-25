@@ -17,19 +17,6 @@ frappe.ui.form.on("Contact", {
 				})
 			});
 		}
-		// if(!frm.doc.user && !frm.is_new() && frm.perm[0].write) {
-		// 	frm.add_custom_button(__("Invite as User"), function() {
-		// 		frappe.call({
-		// 			method: "erpnext.utilities.doctype.contact.contact.invite_user",
-		// 			args: {
-		// 				contact: frm.doc.name
-		// 			},
-		// 			callback: function(r) {
-		// 				frm.set_value("user", r.message);
-		// 			}
-		// 		});
-		// 	});
-		// }
 	},
 	validate: function(frm) {
 		// clear linked customer / supplier / sales partner on saving...

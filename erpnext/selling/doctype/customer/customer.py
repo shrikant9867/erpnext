@@ -11,6 +11,7 @@ from frappe.desk.reportview import build_match_conditions
 from erpnext.utilities.transaction_base import TransactionBase
 from erpnext.utilities.address_and_contact import load_address_and_contact
 from erpnext.accounts.party import validate_party_accounts
+from frappe.model.mapper import get_mapped_doc
 
 class Customer(TransactionBase):
 	def get_feed(self):
@@ -59,12 +60,12 @@ class Customer(TransactionBase):
 	def validate_cin(self):
 		if frappe.db.sql("""select name from `tabCustomer` where name!='%s' and cin_number='%s'"""%(self.name,self.cin_number)):
 			name = frappe.db.sql("""select name from `tabCustomer` where name!='%s' and cin_number='%s'"""%(self.name,self.cin_number),as_list=1)
-			frappe.msgprint("CIN number '%s' is already linked with customer '%s' "%(self.cin_number,name[0][0]),raise_exception=1)
+			frappe.msgprint("CIN No. '%s' is already linked with Customer '%s' "%(self.cin_number,name[0][0]),raise_exception=1)
 
 	def validate_pan(self):
 		if frappe.db.sql("""select name from `tabCustomer` where name!='%s' and pan_number='%s'"""%(self.name,self.pan_number)):
 			name = frappe.db.sql("""select name from `tabCustomer` where name!='%s' and pan_number='%s'"""%(self.name,self.pan_number),as_list=1)
-			frappe.msgprint("PAN number '%s' is already linked with customer '%s' "%(self.pan_number,name[0][0]),raise_exception=1)
+			frappe.msgprint("PAN No. '%s' is already linked with Customer '%s' "%(self.pan_number,name[0][0]),raise_exception=1)
 
 	def validate_promoters(self):
 		promoters_list = []
@@ -165,7 +166,7 @@ def get_dashboard_info(customer):
 		frappe.msgprint(_("Not permitted"), raise_exception=True)
 
 	out = {}
-	for doctype in ["Financial Data","Contact","Operational Matrix","Project Commercial"]:
+	for doctype in ["Financial Data","FFWW","Operational Matrix","Project Commercial"]:
 		if doctype == 'Operational Matrix':
 			out[doctype] = frappe.db.get_value('Operation And Project Commercial',
 			{"docstatus": ["!=", 2],"customer":customer,"operational_matrix_status":'Active' }, "count(*)")
@@ -321,5 +322,22 @@ def get_financial_data(customer):
 
 
 
-	
+@frappe.whitelist()
+def add_ffww(source_name, target_doc=None):
+	return _add_ffww(source_name, target_doc)
+
+def _add_ffww(source_name, target_doc=None, ignore_permissions=False):
+	def set_missing_values(source, target):
+		pass
+
+	doclist = get_mapped_doc("Customer", source_name,
+		{"Customer": {
+			"doctype": "FFWW",
+			"field_map": {
+				"custmer_name": "name"
+				
+			}
+		}}, target_doc, set_missing_values, ignore_permissions=ignore_permissions)
+
+	return doclist
 	

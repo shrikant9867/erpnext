@@ -1,23 +1,20 @@
-<p><button class="btn btn-xs btn-default btn-contact">
-    New Contact</button></p>
-    <div class="clearfix"></div>
+<p><!-- <button class="btn btn-xs btn-default btn-contact">
+    New Contact</button> --></p>
+    <div class="clearfix" ></div>
 
 {% for(var i=0, l=contact_list.length; i<l; i++) { %}
     <p class="h6">
         <div class="row">
-        <div class="col-xs-12">
-            {%= i+1 %}.
+        <div class="col-xs-12" style="margin-bottom:12px;" >
+            <!-- {%= i+1 %}. -->
         </div>
         </div>    
-        <div class="row">
-        <div class="col-xs-8">
-        <label>{%= __("Name") %}</label>: {%= contact_list[i].first_name %} {%= contact_list[i].last_name %}<br>
+        <div class="row" style="border: 1px solid #d1d8dd;background-color: #fafbfc;margin-top:-10px;">
+        <div class="col-xs-10">
+         <div class="col-xs-4" style="margin-left:-15px;"><label>{%= __("Name") %}</label>:</div>  <div class="col-xs-6" style="margin-left:35px;">{%= contact_list[i].first_name %} {%= contact_list[i].last_name %}</div><br>
         </div>
-        <div class="col-xs-4">
-        <!-- {% if(contact_list[i].is_primary_contact) { %}
-            <span class="text-muted">({%= __("Primary") %})</span>
-        {% } %} -->
-
+        <div class="col-xs-2">
+        
         <a href="#Form/Contact/{%= contact_list[i].name %}"
             class="btn btn-xs btn-default pull-right">
             {%= __("Edit") %}</a>
@@ -27,36 +24,36 @@
         <p style="padding-top: 5px; font-size: 12px;">
         <div class="row">
         <div class="col-xs-12">
-        {% if(contact_list[i].status) { %}
-        <label>{%= __("Status") %}</label>: {%= contact_list[i].status %}<br>
+        <div class="row"><div class="col-xs-4">{% if(contact_list[i].status) { %}
+        <label>{%= __("Status") %}</label>:</div> <div class="col-xs-8">{%= contact_list[i].status %}</div></div>
         {% } %}
-        {% if(contact_list[i].phone) { %}
-        <label>{%= __("Landline") %}</label>: {%= contact_list[i].phone %}<br>
+        <div class="row"><div class="col-xs-4">{% if(contact_list[i].phone) { %}
+        <label>{%= __("Landline") %}</label>:</div> <div class="col-xs-8">{%= contact_list[i].phone %}</div></div>
         {% } %}
-        {% if(contact_list[i].linkedin_id) { %}
-        <label>{%= __("Linkedin Id") %}</label>: {%= contact_list[i].linkedin_id %}<br>
+        <div class="row"><div class="col-xs-4">{% if(contact_list[i].linkedin_id) { %}
+        <label>{%= __("Linkedin Id") %}</label>:</div> <div class="col-xs-8">{%= contact_list[i].linkedin_id %}</div></div>
         {% } %}
-        {% if(contact_list[i].skype_id) { %}
-        <label>{%= __("Skype Id") %}</label>: {%= contact_list[i].skype_id %}<br>
+        <div class="row"><div class="col-xs-4">{% if(contact_list[i].skype_id) { %}
+        <label>{%= __("Skype Id") %}</label>:</div> <div class="col-xs-8">{%= contact_list[i].skype_id %}</div></div>
         {% } %}
-        {% if(contact_list[i].personal_emailid) { %}
+       {% if(contact_list[i].personal_emailid) { %}
             {% for(var j=0, len=contact_list[i].personal_emailid.length; j<len; j++) { %}
-            <label>{%= __("Personal Emailid") %}</label>: {%= contact_list[i].personal_emailid[j] %}<br>
+             <div class="row"><div class="col-xs-4"><label>{%= __("P.Email") %}</label>:</div> <div class="col-xs-8">{%= contact_list[i].personal_emailid[j] %}</div></div>
             {% } %}
         {% } %}
         {% if(contact_list[i].official_emailid) { %}
             {% for(var p=0, le=contact_list[i].official_emailid.length; p<le; p++) { %}
-            <label>{%= __("Official Emailid") %}</label>: {%= contact_list[i].official_emailid[p] %}<br>
+             <div class="row"><div class="col-xs-4"><label>{%= __("O.Email") %}</label>:</div> <div class="col-xs-8">{%= contact_list[i].official_emailid[p] %}</div></div>
             {% } %}
         {% } %}
         {% if(contact_list[i].personal_mobileno) { %}
-            {% for(var p=0, le=contact_list[i].personal_mobileno.length; p<le; p++) { %}
-            <label>{%= __("Personal Mobile No.") %}</label>: {%= contact_list[i].personal_mobileno[p] %}<br>
+             {% for(var p=0, le=contact_list[i].personal_mobileno.length; p<le; p++) { %}
+             <div class="row"><div class="col-xs-4"><label>{%= __("P. Mobile No.") %}</label>:</div> <div class="col-xs-8">{%= contact_list[i].personal_mobileno[p] %}</div></div>
             {% } %}
         {% } %}
         {% if(contact_list[i].official_mobileno) { %}
-            {% for(var p=0, le=contact_list[i].official_mobileno.length; p<le; p++) { %}
-            <label>{%= __("Official Mobile No.") %}</label>: {%= contact_list[i].official_mobileno[p] %}<br>
+         <div class="row"><div class="col-xs-4">{% for(var p=0, le=contact_list[i].official_mobileno.length; p<le; p++) { %}
+            <label>{%= __("O.Mobile No.") %}</label>:</div> <div class="col-xs-8">{%= contact_list[i].official_mobileno[p] %}</div></div>
             {% } %}
         {% } %}
         </div>
