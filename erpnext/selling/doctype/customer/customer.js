@@ -10,6 +10,15 @@ frappe.ui.form.on("Customer", "refresh", function(frm) {
 		erpnext.toggle_naming_series();
 	}
 
+	if(!frm.doc.__islocal) {
+			frm.add_custom_button(__("ADD FFWW"), function() {
+				frappe.model.open_mapped_doc({
+					method: "erpnext.selling.doctype.customer.customer.add_ffww",
+					frm: frm
+				})
+			});
+	}
+
 	frm.toggle_display(['address_html','contact_html','financial_details'], !frm.doc.__islocal);
 
 	if(!frm.doc.__islocal) {
@@ -32,14 +41,14 @@ cur_frm.cscript.cin_number =  function(doc,cdt,cdn){
 	
 	var reg = /^[a-zA-Z0-9_]*$/
 	if(reg.test(doc.cin_number) == false) {
-		msgprint('CIN number must be Alphanumeric')
+		msgprint('CIN No. must be Alphanumeric')
 	}
 
 	if(doc.cin_number.length!=21){
-		msgprint('CIN number must be consist of 21 digits')
+		msgprint('CIN No. must be consist of 21 Digits')
 	}
 	if(isnum==true){
-		msgprint('CIN number must be combination of digits and characters')
+		msgprint('CIN No. must be combination of Digits and Characters')
 	}
 }
 
@@ -47,14 +56,14 @@ cur_frm.cscript.pan_number =  function(doc,cdt,cdn){
 	var isnum = /^\d+$/.test(doc.cin_number);
 	var reg = /^[a-zA-Z0-9_]*$/
 	if(reg.test(doc.pan_number) == false) {
-		msgprint('PAN number must be alphanumeric')
+		msgprint('PAN No. must be alphanumeric')
 	}
 
 	if(doc.pan_number.length!=10){
-		msgprint('PAN number must be consist of 10 digits')
+		msgprint('PAN No. must be consist of 10 Digits')
 	}
 	if(isnum==true){
-		msgprint('PAN number must be combination of digits and characters')
+		msgprint('PAN No. must be combination of Digits and Characters')
 	}
 }
 
@@ -78,22 +87,13 @@ cur_frm.cscript.setup_dashboard = function(doc) {
 	if(doc.__islocal)
 		return;
 	var status = ''
-	frappe.call({
-		type: "GET",
-		method: "erpnext.selling.doctype.customer.customer.get_financial_data",
-		args: {
-			customer: cur_frm.doc.name
-		},
-		callback: function(r) {
-			cur_frm.dashboard.add_doctype_badge("Financial Data", "customer");
-			//cur_frm.dashboard.add_doctype_badge("FFWW", "customer");
-			//cur_frm.dashboard.add_doctype_badge("Operational Matrix Details","customer");
-			cur_frm.dashboard.add_page_badge("Operational Matrix","customer");
-			cur_frm.dashboard.add_page_badge("Project Commercial","customer");
-		}
-	});
 
-	
+	cur_frm.dashboard.add_doctype_badge("Financial Data", "customer");
+	//cur_frm.dashboard.add_doctype_badge("FFWW Details", "customer");
+	cur_frm.dashboard.add_page_badge("FFWW","customer");
+	cur_frm.dashboard.add_page_badge("Operational Matrix","customer");
+	cur_frm.dashboard.add_page_badge("Project Commercial","customer");
+
 
 	frappe.call({
 		type: "GET",
@@ -172,7 +172,7 @@ cur_frm.fields_dict['promoters_details'].grid.get_field('p_name').get_query = fu
 cur_frm.cscript.date_of_incorporation = function(doc,cdt,cdn){
 	var today = new Date();
 	if(today<new Date(doc.date_of_incorporation)){
-		msgprint("Date of incorporation must be less than the future date")
+		msgprint("Date of incorporation must be less than the Future Date")
 		doc.date_of_incorporation=''
 		refresh_field('date_of_incorporation')
 	}

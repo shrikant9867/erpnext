@@ -5,14 +5,15 @@ cur_frm.cscript.onload = function(doc, cdt, cdn) {
 	cur_frm.add_fetch('customer', 'customer_name', 'customer_name');
 	cur_frm.add_fetch('supplier', 'supplier_name', 'supplier_name');
 
-	if (doc.doctype!='Financial Data' &&  doc.doctype!='Operational Matrix' && doc.doctype!='FFWW' && doc.doctype!='Project Commercial'){
+	if (doc.doctype!='Financial Data' &&  doc.doctype!='Operational Matrix' && doc.doctype!='FFWW Details' && doc.doctype!='FFWW' && doc.doctype!='Project Commercial'){
 		cur_frm.fields_dict.customer.get_query = erpnext.queries.customer;
 		cur_frm.fields_dict.supplier.get_query = erpnext.queries.supplier;
 	}
 
 	if(cur_frm.doc.doctype==="Project Commercial"){
+		//alert(cur_frm.doc.doctype)
 		cur_frm.set_value("customer", $('input[data-fieldname=customer_nm]').val());
-		cur_frm.set_value("customer_name", $('input[data-fieldname=customer_nm]').val());
+		//cur_frm.set_value("customer_name", $('input[data-fieldname=customer_nm]').val());
 	}
 
 	if(cur_frm.fields_dict.lead) {
@@ -27,7 +28,7 @@ cur_frm.cscript.onload = function(doc, cdt, cdn) {
 				docname = last_route.slice(2).join("/");
 			if(["Customer", "Quotation", "Sales Order", "Sales Invoice", "Delivery Note",
 				"Installation Note", "Opportunity", "Warranty Claim", "Maintenance Visit",
-				"Maintenance Schedule","FFWW","Project Commercial"]
+				"Maintenance Schedule","Project Commercial"]
 				.indexOf(doctype)!==-1) {
 				var refdoc = frappe.get_doc(doctype, docname);
 				if((refdoc.doctype == "Quotation" && refdoc.quotation_to=="Customer") ||

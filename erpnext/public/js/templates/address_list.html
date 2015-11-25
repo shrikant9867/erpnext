@@ -1,7 +1,8 @@
-<p><button class="btn btn-xs btn-default btn-address">New Address</button></p>
+<p><!-- <button class="btn btn-xs btn-default btn-address">New Address</button> --></p>
 <div class="clearfix"></div>
 {% for(var i=0, l=addr_list.length; i<l; i++) { %}
     <p class="h6">
+        <div class="col-xs-12 row" style="border: 1px solid #d1d8dd;background-color: #fafbfc;margin-top:6px;margin-left:1px;">
         {%= i+1 %}. {%= addr_list[i].address_type %}
         {% if(addr_list[i].is_primary_address) { %}
             <span class="text-muted">({%= __("Primary") %})</span>{% } %}
@@ -14,24 +15,27 @@
         </p>
     <div style="padding-left: 15px;">
        <p style="padding-top: 5px; font-size: 14px;">
-            <!-- {%= addr_list[i].display %} -->
-            {% if(addr_list[i].address_line1) { %}
-             <label>{%= __("Address") %}</label>: {%= addr_list[i].address_line1 %}<br>
+           <div class="row">
+        <div class="col-xs-12">
+            <div class="row"><div class="col-xs-4">{% if(addr_list[i].address_line1) { %}
+             <label>{%= __("Address") %}</label>: </div> <div class="col-xs-8">{%= addr_list[i].address_line1 %}</div></div>
             {% } %}
             {% if(addr_list[i].address_line2) { %}
-             <label>{%= __("Address") %}</label>: {%= addr_list[i].address_line2 %}<br>
+             <div class="row"><div class="col-xs-4"><label>{%= __("Address") %}</label>:</div> <div class="col-xs-8">{%= addr_list[i].address_line2 %}</div></div>
             {% } %}
-            {% if(addr_list[i].city) { %}
-             <label>{%= __("City") %}</label>: {%= addr_list[i].city %}<br>
+            <div class="row"><div class="col-xs-4">{% if(addr_list[i].city) { %}
+             <label>{%= __("City") %}</label>:</div> <div class="col-xs-8">{%= addr_list[i].city %}</div></div>
             {% } %}
             {% if(addr_list[i].state) { %}
-             <label>{%= __("State") %}</label>: {%= addr_list[i].state %}<br>
+            <div class="row"><div class="col-xs-4"> <label>{%= __("State") %}</label>:</div> <div class="col-xs-8">{%= addr_list[i].state %}</div></div>
             {% } %}
             {% if(addr_list[i].country) { %}
-             <label>{%= __("Country") %}</label>: {%= addr_list[i].country %}<br>
+            <div class="row"><div class="col-xs-4"> <label>{%= __("Country") %}</label>:</div> <div class="col-xs-8">{%= addr_list[i].country %}</div></div>
             {% } %}
-
+            </div>
+        </div>
         </p>
+    </div>
     </div>
 {% } %}
 {% if(!addr_list.length) { %}
