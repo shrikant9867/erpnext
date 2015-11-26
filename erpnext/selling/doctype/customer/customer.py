@@ -74,7 +74,7 @@ class Customer(TransactionBase):
 				if d.p_name not in promoters_list:
 					promoters_list.append(d.p_name)
 				else:
-					frappe.msgprint("Duplicate promoter name is not allowed",raise_exception=1)
+					frappe.msgprint("Duplicate Promoter name is not allowed",raise_exception=1)
 					break
 
 	def update_lead_status(self):

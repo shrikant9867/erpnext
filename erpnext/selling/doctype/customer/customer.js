@@ -77,6 +77,7 @@ cur_frm.cscript.load_defaults = function(doc, dt, dn) {
 
 cur_frm.add_fetch('lead_name', 'company_name', 'customer_name');
 cur_frm.add_fetch('default_sales_partner','commission_rate','default_commission_rate');
+cur_frm.add_fetch('p_name', 'contact', 'contact');
 
 cur_frm.cscript.validate = function(doc, dt, dn) {
 	if(doc.lead_name) frappe.model.clear_doc("Lead", doc.lead_name);
@@ -161,12 +162,7 @@ cur_frm.fields_dict['accounts'].grid.get_field('account').get_query = function(d
 
 
 cur_frm.fields_dict['promoters_details'].grid.get_field('p_name').get_query = function(doc, cdt, cdn) {
-	return {
-		filters: {
-			
-			"contact_designation": 'Promoter'
-		}
-	}
+	return{	query: "mycfo.mycfo.doctype.financial_data.financial_data.get_promoters" }
 }
 
 cur_frm.cscript.date_of_incorporation = function(doc,cdt,cdn){
