@@ -23,6 +23,11 @@ class Contact(StatusUpdater):
 		self.set_status()
 		self.validate_primary_contact()
 		self.set_user()
+		self.validate_childtable_entry()
+
+	def validate_childtable_entry(self):
+		if not self.get('contacts'):
+			frappe.msgprint("At least one entry is necessary in Contact Details child table",raise_exception=1)
 
 	def set_user(self):
 		if not self.user and self.email_id:
