@@ -6,12 +6,13 @@ import frappe
 from frappe.model.naming import make_autoname
 from frappe import _, msgprint, throw
 import frappe.defaults
-from frappe.utils import flt, cint, cstr
+from frappe.utils import flt, cint, cstr , nowdate
 from frappe.desk.reportview import build_match_conditions
 from erpnext.utilities.transaction_base import TransactionBase
 from erpnext.utilities.address_and_contact import load_address_and_contact
 from erpnext.accounts.party import validate_party_accounts
 from frappe.model.mapper import get_mapped_doc
+import datetime
 
 class Customer(TransactionBase):
 	def get_feed(self):
@@ -20,6 +21,14 @@ class Customer(TransactionBase):
 	def onload(self):
 		"""Load address and contacts in `__onload`"""
 		load_address_and_contact(self, "customer")
+		# frappe.errprint((self.creation))
+		# frappe.errprint(nowdate())
+		# frappe.errprint(type(nowdate()))
+		# frappe.errprint(nowdate().split()[0])
+		# days = (datetime.datetime.strptime(cstr(nowdate().split()[0]),'%Y-%m-%d') - datetime.datetime.strptime(cstr(self.creation),'%Y-%m-%d')).days
+		# # days = (datetime.datetime.strptime(cstr(nowdate()),'%Y-%m-%d') - datetime.datetime.strptime(cstr(self.creation),'%Y-%m-%d')).days
+		# frappe.errprint(days)
+		# if cint(days + 1) > 3 :
 		self.get_financial_data()
 
 	def get_financial_data(self):
@@ -56,6 +65,7 @@ class Customer(TransactionBase):
 		self.validate_promoters()
 		self.validate_cin()
 		self.validate_pan()
+		self.validate_pan_number(self.pan_number)
 
 	def validate_cin(self):
 		if frappe.db.sql("""select name from `tabCustomer` where name!='%s' and cin_number='%s'"""%(self.name,self.cin_number)):
@@ -76,6 +86,29 @@ class Customer(TransactionBase):
 				else:
 					frappe.msgprint("Duplicate Promoter name is not allowed",raise_exception=1)
 					break
+
+	def validate_pan_number(self,pan_number):
+		import re
+		pattern = r'[A-Z]'
+		if len(self.pan_number) == 10:
+			if len(self.pan_number[0:5]) == 5:
+				if re.search(pattern, self.pan_number[0:5]):
+					if self.pan_number[0:5].isalpha():
+						if len(set(self.pan_number[0:3])) == 1:
+							if self.pan_number[5:9].isdigit():
+								if self.pan_number[-1].isalpha():
+									pass
+								else:
+									frappe.msgprint("PAN number last letter must be character",raise_exception=1)
+							else:
+								frappe.msgprint("PAN number letters  from possition 6-9 must be numeric",raise_exception=1)
+						else:
+							frappe.msgprint("First three letters of PAN number are sequence of alphabets from AAA to ZZZ",raise_exception=1)
+					else:
+						frappe.msgprint("First five letters of PAN number must be from A-Z which is compulsory in uppercase",raise_exception=1)
+		else:
+			frappe.msgprint("PAN No. must be consist of 10 Digits.",raise_exception=1)
+
 
 	def update_lead_status(self):
 		if self.lead_name:

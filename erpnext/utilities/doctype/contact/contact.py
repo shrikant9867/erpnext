@@ -14,16 +14,19 @@ class Contact(StatusUpdater):
 			[cstr(self.get(f)).strip() for f in ["first_name", "last_name"]]))
 
 		# concat party name if reqd
-		for fieldname in ("customer", "supplier", "sales_partner"):
-			if self.get(fieldname):
-				self.name = self.name + "-" + cstr(self.get(fieldname)).strip()
-				break
+		# for fieldname in ("customer", "supplier", "sales_partner"):
+		# 	if self.get(fieldname):
+		# 		self.name = self.name + "-" + cstr(self.get(fieldname)).strip()
+		# 		break
 
 	def validate(self):
 		self.set_status()
 		self.validate_primary_contact()
 		self.set_user()
 		self.validate_childtable_entry()
+		self.validate_linkdedin_id()
+		self.validate_skype_id()
+		self.validate_duplication_emailid()
 
 	def validate_childtable_entry(self):
 		if not self.get('contacts'):
@@ -32,6 +35,25 @@ class Contact(StatusUpdater):
 	def set_user(self):
 		if not self.user and self.email_id:
 			self.user = frappe.db.get_value("User", {"email": self.email_id})
+
+	def validate_linkdedin_id(self):
+		if frappe.db.sql("""select name from `tabContact` where name!='%s' and linkedin_id='%s'"""%(self.name,self.linkedin_id)):
+			frappe.msgprint("Linkedin id '%s' is already assigned for another contact"%self.linkedin_id,raise_exception=1)
+
+	def validate_skype_id(self):
+		if frappe.db.sql("""select name from `tabContact` where name!='%s' and skype_id='%s'"""%(self.name,self.skype_id)):
+			frappe.msgprint("Skype id '%s' is already assigned for another contact"%self.skype_id,raise_exception=1)
+
+	def validate_duplication_emailid(self):
+		frappe.errprint("validate_duplication_emailid")
+		email_list = []
+		if self.get('contacts'):
+			for d in self.get('contacts'):
+				if d.email_id not in email_list:
+					email_list.append(d.email_id)
+				else:
+					frappe.msgprint("Duplicate Email ID is not allowed",raise_exception=1)
+					break
 
 	def validate_primary_contact(self):
 		if self.is_primary_contact == 1:
