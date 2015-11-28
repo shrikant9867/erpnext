@@ -3,7 +3,7 @@
 {% for(var i=0, l=addr_list.length; i<l; i++) { %}
     <p class="h6">
         <div class="col-xs-12 row" style="border: 1px solid #d1d8dd;background-color: #fafbfc;margin-top:6px;margin-left:1px;">
-        {%= i+1 %}. {%= addr_list[i].address_type %}
+        {%= i+1 %}. {%= addr_list[i].address_title %}
         {% if(addr_list[i].is_primary_address) { %}
             <span class="text-muted">({%= __("Primary") %})</span>{% } %}
         {% if(addr_list[i].is_shipping_address) { %}
@@ -14,7 +14,7 @@
             {%= __("Edit") %}</a>
         </p>
     <div style="padding-left: 15px;">
-       <p style="padding-top: 5px; font-size: 14px;">
+       <p style="font-size: 14px;">
            <div class="row">
         <div class="col-xs-12">
             <div class="row"><div class="col-xs-4">{% if(addr_list[i].address_line1) { %}

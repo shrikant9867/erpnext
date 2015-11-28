@@ -41,30 +41,41 @@ cur_frm.cscript.cin_number =  function(doc,cdt,cdn){
 	
 	var reg = /^[a-zA-Z0-9_]*$/
 	if(reg.test(doc.cin_number) == false) {
-		msgprint('CIN No. must be Alphanumeric')
+		msgprint('CIN No. must be Alphanumeric.')
 	}
 
 	if(doc.cin_number.length!=21){
-		msgprint('CIN No. must be consist of 21 Digits')
+		msgprint('CIN No. must be consist of 21 Digits.')
 	}
 	if(isnum==true){
-		msgprint('CIN No. must be combination of Digits and Characters')
+		msgprint('CIN No. must be combination of Digits and Characters.')
 	}
 }
 
 cur_frm.cscript.pan_number =  function(doc,cdt,cdn){
+
+	$c('runserverobj', args={'method':'validate_pan_number', 'arg': doc.pan_number, 'docs': doc}, function(r,rt) {
+		//cur_frm.refresh();
+	});
+
 	var isnum = /^\d+$/.test(doc.cin_number);
 	var reg = /^[a-zA-Z0-9_]*$/
 	if(reg.test(doc.pan_number) == false) {
-		msgprint('PAN No. must be alphanumeric')
+		msgprint('PAN No. must be alphanumeric.')
+		// doc.pan_number =''
+		// refresh_field('pan_number')
+
 	}
 
-	if(doc.pan_number.length!=10){
-		msgprint('PAN No. must be consist of 10 Digits')
-	}
 	if(isnum==true){
-		msgprint('PAN No. must be combination of Digits and Characters')
+		msgprint('PAN No. must be combination of Digits and Characters.')
+		// doc.pan_number =''
+		// refresh_field('pan_number')
 	}
+
+	
+
+
 }
 
 cur_frm.cscript.load_defaults = function(doc, dt, dn) {
@@ -77,6 +88,7 @@ cur_frm.cscript.load_defaults = function(doc, dt, dn) {
 
 cur_frm.add_fetch('lead_name', 'company_name', 'customer_name');
 cur_frm.add_fetch('default_sales_partner','commission_rate','default_commission_rate');
+cur_frm.add_fetch('p_name', 'contact', 'contact');
 
 cur_frm.cscript.validate = function(doc, dt, dn) {
 	if(doc.lead_name) frappe.model.clear_doc("Lead", doc.lead_name);
@@ -160,14 +172,9 @@ cur_frm.fields_dict['accounts'].grid.get_field('account').get_query = function(d
 }
 
 
-cur_frm.fields_dict['promoters_details'].grid.get_field('p_name').get_query = function(doc, cdt, cdn) {
-	return {
-		filters: {
-			
-			"contact_designation": 'Promoter'
-		}
-	}
-}
+// cur_frm.fields_dict['promoters_details'].grid.get_field('p_name').get_query = function(doc, cdt, cdn) {
+// 	return{	query: "mycfo.mycfo.doctype.financial_data.financial_data.get_promoters" }
+// }
 
 cur_frm.cscript.date_of_incorporation = function(doc,cdt,cdn){
 	var today = new Date();

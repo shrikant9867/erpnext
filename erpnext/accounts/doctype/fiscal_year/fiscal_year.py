@@ -55,7 +55,7 @@ class FiscalYear(Document):
 				if d.company not in company_list:
 					company_list.append(d.company)
 				else:
-					frappe.msgprint("Duplicate company name is not allowed in company child table",raise_exception=1)
+					frappe.msgprint("Duplicate Company Name is not allowed in Company child table",raise_exception=1)
 					break
 
 
