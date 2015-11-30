@@ -6,12 +6,18 @@ import frappe
 from frappe.utils import cstr
 from frappe.model.mapper import get_mapped_doc
 from erpnext.controllers.status_updater import StatusUpdater
+from frappe.utils import flt, cint, cstr , nowdate
 
 class Contact(StatusUpdater):
 	def autoname(self):
-		# concat first and last name
-		self.name = " ".join(filter(None,
+
+		count = frappe.db.sql("""select name from `tabContact` where first_name='%s' and last_name='%s' """%(self.first_name,self.last_name),as_list=1,debug=1)
+
+		number = cint(len(count)) + 1
+		name = " ".join(filter(None,
 			[cstr(self.get(f)).strip() for f in ["first_name", "last_name"]]))
+		self.name = "-".join(filter(None,
+			[cstr(f).strip() for f in [number, name]]))
 
 		# concat party name if reqd
 		# for fieldname in ("customer", "supplier", "sales_partner"):
@@ -27,6 +33,19 @@ class Contact(StatusUpdater):
 		self.validate_linkdedin_id()
 		self.validate_skype_id()
 		self.validate_duplication_emailid()
+		self.validate_one_preffered_contact()
+		self.create_preferred_details()
+		
+
+	def create_preferred_details(self):
+		if self.get('contacts'):
+			for d in self.get('contacts'):
+				if d.preffered == 1:
+					self.country_code = d.country_code
+					self.email = d.email_id
+					self.mobile = d.mobile_no
+					self.landline = d.landline
+
 
 	def validate_childtable_entry(self):
 		if not self.get('contacts'):
@@ -45,7 +64,6 @@ class Contact(StatusUpdater):
 			frappe.msgprint("Skype id '%s' is already assigned for another contact"%self.skype_id,raise_exception=1)
 
 	def validate_duplication_emailid(self):
-		frappe.errprint("validate_duplication_emailid")
 		email_list = []
 		if self.get('contacts'):
 			for d in self.get('contacts'):
@@ -54,6 +72,19 @@ class Contact(StatusUpdater):
 				else:
 					frappe.msgprint("Duplicate Email ID is not allowed",raise_exception=1)
 					break
+
+	def validate_one_preffered_contact(self):
+		count = 0
+		if self.get('contacts'):
+			for d in self.get('contacts'):
+				if d.preffered == 1:
+					count = count + 1
+			if cint(count)>1:
+				frappe.msgprint("Only one contact details must be preferred as primary details",raise_exception=1)
+			elif cint(count)<1:
+				frappe.msgprint(" At least one contact must be selected as preferred primary details",raise_exception=1)
+
+
 
 	def validate_primary_contact(self):
 		if self.is_primary_contact == 1:

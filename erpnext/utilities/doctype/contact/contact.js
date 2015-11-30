@@ -31,23 +31,22 @@ frappe.ui.form.on("Contact", {
 });
 
 
-cur_frm.cscript.skype_id = function(doc,cdt,cdn){
-	var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-	if (reg.test(doc.skype_id) == false) 
-	{
-	    msgprint('Invalid Skype ID');
-	}
-}
+// cur_frm.cscript.skype_id = function(doc,cdt,cdn){
+// 	var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+// 	if (reg.test(doc.skype_id) == false) 
+// 	{
+// 	    msgprint('Invalid Skype ID');
+// 	}
+// }
 
 
-cur_frm.cscript.linkedin_id = function(doc,cdt,cdn){
-	var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-	if (reg.test(doc.linkedin_id) == false) 
-	{
-	    msgprint('Invalid linkedin ID');
-	}
-}
-
+// cur_frm.cscript.linkedin_id = function(doc,cdt,cdn){
+// 	var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+// 	if (reg.test(doc.linkedin_id) == false) 
+// 	{
+// 	    msgprint('Invalid linkedin ID');
+// 	}
+// }
 
 cur_frm.cscript.email_id = function(doc,cdt,cdn){
 	var d = locals[cdt][cdn];
@@ -64,4 +63,40 @@ cur_frm.cscript.mobile_no = function(doc,cdt,cdn){
 	{
 	    msgprint('Mobile Number must be 10 digits');
 	}
+}
+
+cur_frm.cscript.onload = function(doc, cdt, cdn) {
+	console.log("onload")
+	console.log(frappe.route_history)
+	if(doc.__islocal) {
+		var last_route = frappe.route_history.slice(-2, -1)[0];
+		if(last_route && last_route[0]==="Form") {
+			var doctype = last_route[1],
+				docname = last_route.slice(2).join("/");
+			console.log(doctype)
+			console.log(docname)
+
+	    }
+	}
+}
+
+cur_frm.cscript.contacts_add = function(doc,cdt,cdn){
+	var d = locals[cdt][cdn]
+	if(frappe.route_history.length>1){
+		var last_route = frappe.route_history.slice(-2, -1)[0];
+		if(last_route && last_route[0]==="Form") {
+			var doctype = last_route[1],
+				docname = last_route.slice(2).join("/");
+			console.log(doctype)
+			console.log(docname)
+			if(doctype){
+				if (doctype == 'FFWW'){
+					d.ffww = docname
+					refresh_field('contacts');
+				}
+			}
+	}
+
+}
+
 }

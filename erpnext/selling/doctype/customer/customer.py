@@ -21,15 +21,10 @@ class Customer(TransactionBase):
 	def onload(self):
 		"""Load address and contacts in `__onload`"""
 		load_address_and_contact(self, "customer")
-		# frappe.errprint((self.creation))
-		# frappe.errprint(nowdate())
-		# frappe.errprint(type(nowdate()))
-		# frappe.errprint(nowdate().split()[0])
-		# days = (datetime.datetime.strptime(cstr(nowdate().split()[0]),'%Y-%m-%d') - datetime.datetime.strptime(cstr(self.creation),'%Y-%m-%d')).days
-		# # days = (datetime.datetime.strptime(cstr(nowdate()),'%Y-%m-%d') - datetime.datetime.strptime(cstr(self.creation),'%Y-%m-%d')).days
-		# frappe.errprint(days)
-		# if cint(days + 1) > 3 :
-		self.get_financial_data()
+		# import time
+		# days = (datetime.datetime.strptime(cstr(nowdate()),'%Y-%m-%d') - datetime.datetime.strptime(cstr(cstr(self.creation).split()[0]),'%Y-%m-%d')).days
+		# if cint(days) > 3 :
+		# 	self.get_financial_data()
 
 	def get_financial_data(self):
 		fiscal_year = frappe.db.sql("""select value from `tabSingles` where doctype='Global Defaults' and field='current_fiscal_year'""",as_list=1)
@@ -66,6 +61,7 @@ class Customer(TransactionBase):
 		self.validate_cin()
 		self.validate_pan()
 		self.validate_pan_number(self.pan_number)
+		self.validate_cin_number(self.cin_number)
 
 	def validate_cin(self):
 		if frappe.db.sql("""select name from `tabCustomer` where name!='%s' and cin_number='%s'"""%(self.name,self.cin_number)):
@@ -108,6 +104,36 @@ class Customer(TransactionBase):
 						frappe.msgprint("First five letters of PAN number must be from A-Z which is compulsory in uppercase",raise_exception=1)
 		else:
 			frappe.msgprint("PAN No. must be consist of 10 Digits.",raise_exception=1)
+
+
+	def validate_cin_number(self,cin_number):
+		import re
+		pattern = r'[A-Z]'
+		if len(self.cin_number) == 21:
+				if re.search(pattern, self.cin_number[0:1]):
+					if self.cin_number[0:1].isalpha():
+						if self.cin_number[1:6].isdigit():
+							if self.cin_number[6:8].isalpha():
+								if self.cin_number[8:12].isdigit():
+									if self.cin_number[12:15].isalpha():
+										if self.cin_number[15:21].isdigit():
+											pass
+										else:
+											frappe.msgprint("CIN number letters  from possition 15-21 must be numeric",raise_exception=1)
+									else:
+										frappe.msgprint("CIN number letters  from possition 12-15 must be alphanumeric",raise_exception=1)
+								else:
+									frappe.msgprint("CIN number letters  from possition 9-12 must be numeric",raise_exception=1)
+
+							else:
+								frappe.msgprint("CIN number letters  from possition 7-8 must be alphanumeric",raise_exception=1)
+						else:
+							frappe.msgprint("CIN number letters  from possition 2-6 must be numeric",raise_exception=1)
+				else:
+					frappe.msgprint("First letter of CIN number must be from A-Z which is compulsory in uppercase",raise_exception=1)
+		else:
+			frappe.msgprint("CIN No. must be consist of 21 Digits.",raise_exception=1)
+
 
 
 	def update_lead_status(self):
