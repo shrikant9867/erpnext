@@ -11,14 +11,14 @@
         </div>    
         <div class="row" style="border: 1px solid #d1d8dd;background-color: #fafbfc;margin-top:-10px;">
         <div class="col-xs-10">
-         <h4>Personal Details :</h4>
+         <h4>Preferred Details :</h4>
          <div class="col-xs-4" style="margin-left:-15px;"><label>{%= __("Name") %}</label>:</div>  <div class="col-xs-6" style="margin-left:35px;">{%= contact_list[i].first_name %} {%= contact_list[i].last_name %}</div><br>
         </div>
         <div class="col-xs-2">
         
         <a href="#Form/Contact/{%= contact_list[i].name %}"
             class="btn btn-xs btn-default pull-right">
-            {%= __("Edit") %}</a>
+            {%= __("View") %}</a>
         </div>    
     </p>
     <div style="padding-left: 15px;">
@@ -28,19 +28,31 @@
         <div class="row"><div class="col-xs-4">{% if(contact_list[i].status) { %}
         <label>{%= __("Status") %}</label>:</div> <div class="col-xs-8">{%= contact_list[i].status %}</div></div>
         {% } %}
-        <div class="row"><div class="col-xs-4">{% if(contact_list[i].phone) { %}
-        <label>{%= __("Landline") %}</label>:</div> <div class="col-xs-8">{%= contact_list[i].phone %}</div></div>
+        <div class="row"><div class="col-xs-4">{% if(contact_list[i].email) { %}
+        <label>{%= __("Email") %}</label>:</div> <div class="col-xs-8">{%= contact_list[i].email %}</div></div>
         {% } %}
         <div class="row"><div class="col-xs-4">{% if(contact_list[i].linkedin_id) { %}
-        <label>{%= __("Linkedin Id") %}</label>:</div> <div class="col-xs-8">{%= contact_list[i].linkedin_id %}</div></div>
+        <label>{%= __("Linkedein Id") %}</label>:</div> <div class="col-xs-8">{%= contact_list[i].linkedin_id %}</div></div>
         {% } %}
         <div class="row"><div class="col-xs-4">{% if(contact_list[i].skype_id) { %}
         <label>{%= __("Skype Id") %}</label>:</div> <div class="col-xs-8">{%= contact_list[i].skype_id %}</div></div>
         {% } %}
+        <div class="row"><div class="col-xs-4">{% if(contact_list[i].mobile) { %}
+        <label>{%= __("Mobile") %}</label>:</div> <div class="col-xs-8">{%= contact_list[i].country_code %}{%= contact_list[i].mobile %}</div></div>
+        {% } %}
+        <!-- <div class="row"><div class="col-xs-4">{% if(contact_list[i].landline) { %}
+        <label>{%= __("Landline") %}</label>:</div> <div class="col-xs-8">{%= contact_list[i].landline %}</div></div>
+        {% } %} -->
+        {% if(contact_list[i].personal_emailid) { %}
+        {% if(contact_list[i].personal_emailid.length) { %}
+        <hr style="margin-left:-16px;">
+        <h4>Personal Details :</h4>
        {% if(contact_list[i].personal_emailid) { %}
             {% for(var j=0, len=contact_list[i].personal_emailid.length; j<len; j++) { %}
              <div class="row"><div class="col-xs-4"><label>{%= __("Email") %}</label>:</div> <div class="col-xs-8">{%= contact_list[i].personal_emailid[j] %}</div></div>
             {% } %}
+        {% } %}
+        {% } %}
         {% } %}
         {% if(contact_list[i].personal_mobileno) { %}
              {% for(var p=0, le=contact_list[i].personal_mobileno.length; p<le; p++) { %}

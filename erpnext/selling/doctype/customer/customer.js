@@ -11,7 +11,7 @@ frappe.ui.form.on("Customer", "refresh", function(frm) {
 	}
 
 	if(!frm.doc.__islocal) {
-			frm.add_custom_button(__("ADD FFWW"), function() {
+			frm.add_custom_button(__("ADD FFWW / CONTACT"), function() {
 				frappe.model.open_mapped_doc({
 					method: "erpnext.selling.doctype.customer.customer.add_ffww",
 					frm: frm
@@ -37,16 +37,17 @@ cur_frm.cscript.onload = function(doc, dt, dn) {
 	cur_frm.cscript.load_defaults(doc, dt, dn);
 }
 cur_frm.cscript.cin_number =  function(doc,cdt,cdn){
-	var isnum = /^\d+$/.test(doc.cin_number);
 	
+	$c('runserverobj', args={'method':'validate_cin_number', 'arg': doc.cin_number, 'docs': doc}, function(r,rt) {
+		//cur_frm.refresh();
+	});
+
+	var isnum = /^\d+$/.test(doc.cin_number);
 	var reg = /^[a-zA-Z0-9_]*$/
 	if(reg.test(doc.cin_number) == false) {
 		msgprint('CIN No. must be Alphanumeric.')
 	}
 
-	if(doc.cin_number.length!=21){
-		msgprint('CIN No. must be consist of 21 Digits.')
-	}
 	if(isnum==true){
 		msgprint('CIN No. must be combination of Digits and Characters.')
 	}
