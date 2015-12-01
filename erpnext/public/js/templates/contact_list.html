@@ -16,9 +16,8 @@
         </div>
         <div class="col-xs-2">
         
-        <a href="#Form/Contact/{%= contact_list[i].name %}"
-            class="btn btn-xs btn-default pull-right">
-            {%= __("View") %}</a>
+        <p><button class="btn btn-xs btn-default btn-view">
+    View</button></p>
         </div>    
     </p>
     <div style="padding-left: 15px;">
@@ -31,14 +30,14 @@
         <div class="row"><div class="col-xs-4">{% if(contact_list[i].email) { %}
         <label>{%= __("Email") %}</label>:</div> <div class="col-xs-8">{%= contact_list[i].email %}</div></div>
         {% } %}
-        <div class="row"><div class="col-xs-4">{% if(contact_list[i].linkedin_id) { %}
-        <label>{%= __("Linkedein Id") %}</label>:</div> <div class="col-xs-8">{%= contact_list[i].linkedin_id %}</div></div>
-        {% } %}
-        <div class="row"><div class="col-xs-4">{% if(contact_list[i].skype_id) { %}
-        <label>{%= __("Skype Id") %}</label>:</div> <div class="col-xs-8">{%= contact_list[i].skype_id %}</div></div>
-        {% } %}
         <div class="row"><div class="col-xs-4">{% if(contact_list[i].mobile) { %}
         <label>{%= __("Mobile") %}</label>:</div> <div class="col-xs-8">{%= contact_list[i].country_code %}{%= contact_list[i].mobile %}</div></div>
+        {% } %}
+        {% if(contact_list[i].linkedin_id) { %}<div class="row"><div class="col-xs-4">
+        <label>{%= __("Linkedein Id") %}</label>:</div> <div class="col-xs-8">{%= contact_list[i].linkedin_id %}</div></div>
+        {% } %}
+        {% if(contact_list[i].skype_id) { %}<div class="row"><div class="col-xs-4">
+        <label>{%= __("Skype Id") %}</label>:</div> <div class="col-xs-8">{%= contact_list[i].skype_id %}</div></div>
         {% } %}
         <!-- <div class="row"><div class="col-xs-4">{% if(contact_list[i].landline) { %}
         <label>{%= __("Landline") %}</label>:</div> <div class="col-xs-8">{%= contact_list[i].landline %}</div></div>
@@ -84,3 +83,5 @@
 {% if(!contact_list.length) { %}
 <p class="text-muted">{%= __("No contacts added yet.") %}</p>
 {% } %}
+
+ 

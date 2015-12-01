@@ -65,38 +65,42 @@ cur_frm.cscript.mobile_no = function(doc,cdt,cdn){
 	}
 }
 
-cur_frm.cscript.onload = function(doc, cdt, cdn) {
-	console.log("onload")
-	console.log(frappe.route_history)
-	if(doc.__islocal) {
-		var last_route = frappe.route_history.slice(-2, -1)[0];
-		if(last_route && last_route[0]==="Form") {
-			var doctype = last_route[1],
-				docname = last_route.slice(2).join("/");
-			console.log(doctype)
-			console.log(docname)
+// cur_frm.cscript.onload = function(doc, cdt, cdn) {
+// 	console.log("onload")
+// 	console.log(frappe.route_history)
+// 	if(doc.__islocal) {
+// 		var last_route = frappe.route_history.slice(-2, -1)[0];
+// 		if(last_route && last_route[0]==="Form") {
+// 			var doctype = last_route[1],
+// 				docname = last_route.slice(2).join("/");
+// 			console.log(doctype)
+// 			console.log(docname)
 
-	    }
-	}
-}
+// 	    }
+// 	}
+// }
 
 cur_frm.cscript.contacts_add = function(doc,cdt,cdn){
 	var d = locals[cdt][cdn]
+	
 	if(frappe.route_history.length>1){
 		var last_route = frappe.route_history.slice(-2, -1)[0];
 		if(last_route && last_route[0]==="Form") {
 			var doctype = last_route[1],
 				docname = last_route.slice(2).join("/");
-			console.log(doctype)
-			console.log(docname)
 			if(doctype){
 				if (doctype == 'FFWW'){
 					d.ffww = docname
 					refresh_field('contacts');
 				}
 			}
-	}
+		}
 
-}
+	}
+	if(frappe.route_options){
+		
+		d.ffww = frappe.route_options
+		refresh_field('contacts')
+	}
 
 }

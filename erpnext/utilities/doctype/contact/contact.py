@@ -56,12 +56,14 @@ class Contact(StatusUpdater):
 			self.user = frappe.db.get_value("User", {"email": self.email_id})
 
 	def validate_linkdedin_id(self):
-		if frappe.db.sql("""select name from `tabContact` where name!='%s' and linkedin_id='%s'"""%(self.name,self.linkedin_id)):
-			frappe.msgprint("Linkedin id '%s' is already assigned for another contact"%self.linkedin_id,raise_exception=1)
+		if self.linkedin_id:
+			if frappe.db.sql("""select name from `tabContact` where name!='%s' and linkedin_id='%s'"""%(self.name,self.linkedin_id)):
+				frappe.msgprint("Linkedin id '%s' is already assigned for another contact"%self.linkedin_id,raise_exception=1)
 
 	def validate_skype_id(self):
-		if frappe.db.sql("""select name from `tabContact` where name!='%s' and skype_id='%s'"""%(self.name,self.skype_id)):
-			frappe.msgprint("Skype id '%s' is already assigned for another contact"%self.skype_id,raise_exception=1)
+		if self.skype_id:
+			if frappe.db.sql("""select name from `tabContact` where name!='%s' and skype_id='%s'"""%(self.name,self.skype_id)):
+				frappe.msgprint("Skype id '%s' is already assigned for another contact"%self.skype_id,raise_exception=1)
 
 	def validate_duplication_emailid(self):
 		email_list = []
