@@ -21,10 +21,10 @@ class Customer(TransactionBase):
 	def onload(self):
 		"""Load address and contacts in `__onload`"""
 		load_address_and_contact(self, "customer")
-		# import time
-		# days = (datetime.datetime.strptime(cstr(nowdate()),'%Y-%m-%d') - datetime.datetime.strptime(cstr(cstr(self.creation).split()[0]),'%Y-%m-%d')).days
-		# if cint(days) > 3 :
-		# 	self.get_financial_data()
+		import time
+		todays_date = datetime.datetime.strptime(cstr(nowdate()),'%Y-%m-%d')
+		if todays_date.month > 6:
+			self.get_financial_data()
 
 	def get_financial_data(self):
 		fiscal_year = frappe.db.sql("""select value from `tabSingles` where doctype='Global Defaults' and field='current_fiscal_year'""",as_list=1)
@@ -61,7 +61,8 @@ class Customer(TransactionBase):
 		self.validate_cin()
 		self.validate_pan()
 		self.validate_pan_number(self.pan_number)
-		self.validate_cin_number(self.cin_number)
+		if self.cin_number:
+			self.validate_cin_number(self.cin_number)
 
 	def validate_cin(self):
 		if frappe.db.sql("""select name from `tabCustomer` where name!='%s' and cin_number='%s'"""%(self.name,self.cin_number)):
@@ -87,21 +88,16 @@ class Customer(TransactionBase):
 		import re
 		pattern = r'[A-Z]'
 		if len(self.pan_number) == 10:
-			if len(self.pan_number[0:5]) == 5:
-				if re.search(pattern, self.pan_number[0:5]):
-					if self.pan_number[0:5].isalpha():
-						if len(set(self.pan_number[0:3])) == 1:
-							if self.pan_number[5:9].isdigit():
-								if self.pan_number[-1].isalpha():
-									pass
-								else:
-									frappe.msgprint("PAN number last letter must be character",raise_exception=1)
-							else:
-								frappe.msgprint("PAN number letters  from possition 6-9 must be numeric",raise_exception=1)
+			if self.pan_number[0:5].isalpha():
+					if self.pan_number[5:9].isdigit():
+						if self.pan_number[-1].isalpha():
+							pass
 						else:
-							frappe.msgprint("First three letters of PAN number are sequence of alphabets from AAA to ZZZ",raise_exception=1)
+							frappe.msgprint("PAN number last charcter must be letter",raise_exception=1)
 					else:
-						frappe.msgprint("First five letters of PAN number must be from A-Z which is compulsory in uppercase",raise_exception=1)
+						frappe.msgprint("PAN number letters  from possition 6-9 must be numeric",raise_exception=1)
+			else:
+				frappe.msgprint("First five characters of PAN number must be letters",raise_exception=1)
 		else:
 			frappe.msgprint("PAN No. must be consist of 10 Digits.",raise_exception=1)
 
@@ -110,27 +106,26 @@ class Customer(TransactionBase):
 		import re
 		pattern = r'[A-Z]'
 		if len(self.cin_number) == 21:
-				if re.search(pattern, self.cin_number[0:1]):
-					if self.cin_number[0:1].isalpha():
-						if self.cin_number[1:6].isdigit():
-							if self.cin_number[6:8].isalpha():
-								if self.cin_number[8:12].isdigit():
-									if self.cin_number[12:15].isalpha():
-										if self.cin_number[15:21].isdigit():
-											pass
-										else:
-											frappe.msgprint("CIN number letters  from possition 15-21 must be numeric",raise_exception=1)
+				if self.cin_number[0:1].isalpha():
+					if self.cin_number[1:6].isdigit():
+						if self.cin_number[6:8].isalpha():
+							if self.cin_number[8:12].isdigit():
+								if self.cin_number[12:15].isalpha():
+									if self.cin_number[15:21].isdigit():
+										pass
 									else:
-										frappe.msgprint("CIN number letters  from possition 12-15 must be alphanumeric",raise_exception=1)
+										frappe.msgprint("CIN number letters  from possition 15-21 must be numeric",raise_exception=1)
 								else:
-									frappe.msgprint("CIN number letters  from possition 9-12 must be numeric",raise_exception=1)
-
+									frappe.msgprint("CIN number letters  from possition 12-15 must be alphanumeric",raise_exception=1)
 							else:
-								frappe.msgprint("CIN number letters  from possition 7-8 must be alphanumeric",raise_exception=1)
+								frappe.msgprint("CIN number letters  from possition 9-12 must be numeric",raise_exception=1)
+
 						else:
-							frappe.msgprint("CIN number letters  from possition 2-6 must be numeric",raise_exception=1)
+							frappe.msgprint("CIN number letters  from possition 7-8 must be alphanumeric",raise_exception=1)
+					else:
+						frappe.msgprint("CIN number letters  from possition 2-6 must be numeric",raise_exception=1)
 				else:
-					frappe.msgprint("First letter of CIN number must be from A-Z which is compulsory in uppercase",raise_exception=1)
+					frappe.msgprint("First character of CIN number must be letter",raise_exception=1)
 		else:
 			frappe.msgprint("CIN No. must be consist of 21 Digits.",raise_exception=1)
 
