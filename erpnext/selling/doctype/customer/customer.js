@@ -42,15 +42,15 @@ cur_frm.cscript.cin_number =  function(doc,cdt,cdn){
 		//cur_frm.refresh();
 	});
 
-	var isnum = /^\d+$/.test(doc.cin_number);
-	var reg = /^[a-zA-Z0-9_]*$/
-	if(reg.test(doc.cin_number) == false) {
-		msgprint('CIN No. must be Alphanumeric.')
-	}
+	// var isnum = /^\d+$/.test(doc.cin_number);
+	// var reg = /^[a-zA-Z0-9_]*$/
+	// if(reg.test(doc.cin_number) == false) {
+	// 	msgprint('CIN No. must be Alphanumeric.')
+	// }
 
-	if(isnum==true){
-		msgprint('CIN No. must be combination of Digits and Characters.')
-	}
+	// if(isnum==true){
+	// 	msgprint('CIN No. must be combination of Digits and Characters.')
+	// }
 }
 
 cur_frm.cscript.pan_number =  function(doc,cdt,cdn){
