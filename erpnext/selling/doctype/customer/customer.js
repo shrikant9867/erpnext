@@ -180,7 +180,7 @@ cur_frm.fields_dict['accounts'].grid.get_field('account').get_query = function(d
 cur_frm.cscript.date_of_incorporation = function(doc,cdt,cdn){
 	var today = new Date();
 	if(today<new Date(doc.date_of_incorporation)){
-		msgprint("Date of incorporation must be less than the Future Date")
+		msgprint("Date of incorporation should not be Future Date")
 		doc.date_of_incorporation=''
 		refresh_field('date_of_incorporation')
 	}
