@@ -90,6 +90,7 @@ cur_frm.cscript.load_defaults = function(doc, dt, dn) {
 cur_frm.add_fetch('lead_name', 'company_name', 'customer_name');
 cur_frm.add_fetch('default_sales_partner','commission_rate','default_commission_rate');
 cur_frm.add_fetch('p_name', 'contact', 'contact');
+cur_frm.add_fetch('currency','symbol','currency_symbol');
 
 cur_frm.cscript.validate = function(doc, dt, dn) {
 	if(doc.lead_name) frappe.model.clear_doc("Lead", doc.lead_name);

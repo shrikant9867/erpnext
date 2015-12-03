@@ -4,8 +4,8 @@
 {% include 'controllers/js/contact_address_common.js' %};
 
 cur_frm.add_fetch('customer', 'customer_name', 'customer_name');
-cur_frm.add_fetch('country_code','country','country');
-
+cur_frm.add_fetch('country_name','country_code','country_code');
+cur_frm.add_fetch('country_name','number_of_digits_allowed','digit');
 
 cur_frm.email_field = "email_id";
 frappe.ui.form.on("Contact", {
@@ -59,26 +59,30 @@ cur_frm.cscript.email_id = function(doc,cdt,cdn){
 
 cur_frm.cscript.mobile_no = function(doc,cdt,cdn){
 	var d = locals[cdt][cdn];
-	if (d.mobile_no.length!=10) 
-	{
-	    msgprint('Mobile Number must be 10 digits');
+	if(isNaN(d.mobile_no)==true){
+		msgprint("Mobile number must be consist of omly digits")
+		d.mobile_no=''
+		refresh_field('contacts');
+	}
+	if(d.country_name && d.mobile_no){
+		if((d.mobile_no).toString().length != parseInt(d.digit)){
+			msgprint('Mobile Number must be '+d.digit+' digits as per the country '+d.country_name+'');
+			d.mobile_no=''
+			refresh_field('contacts');
+		}
 	}
 }
 
-// cur_frm.cscript.onload = function(doc, cdt, cdn) {
-// 	console.log("onload")
-// 	console.log(frappe.route_history)
-// 	if(doc.__islocal) {
-// 		var last_route = frappe.route_history.slice(-2, -1)[0];
-// 		if(last_route && last_route[0]==="Form") {
-// 			var doctype = last_route[1],
-// 				docname = last_route.slice(2).join("/");
-// 			console.log(doctype)
-// 			console.log(docname)
-
-// 	    }
-// 	}
-// }
+cur_frm.cscript.country_name = function(doc,cdt,cdn){
+	var d = locals[cdt][cdn];
+	if(d.mobile_no){
+		if((d.mobile_no).toString().length!= parseInt(d.digit)){
+			msgprint('Mobile Number must be '+d.digit+' digits as per the country '+d.country_name+'');
+			d.mobile_no=''
+			refresh_field('contacts');
+		}
+	}
+}
 
 cur_frm.cscript.contacts_add = function(doc,cdt,cdn){
 	var d = locals[cdt][cdn]
