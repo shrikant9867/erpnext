@@ -10,9 +10,10 @@ from frappe.utils import flt, cint, cstr , nowdate
 
 class Contact(StatusUpdater):
 	def autoname(self):
-
-		count = frappe.db.sql("""select name from `tabContact` where first_name='%s' and last_name='%s' """%(self.first_name,self.last_name),as_list=1,debug=1)
-
+		if self.first_name and self.last_name:
+			count = frappe.db.sql("""select name from `tabContact` where first_name='%s' and last_name='%s' """%(self.first_name,self.last_name),as_list=1)
+		else:
+			count = frappe.db.sql("""select name from `tabContact` where first_name='%s' """%(self.first_name),as_list=1)
 		number = cint(len(count)) + 1
 		name = " ".join(filter(None,
 			[cstr(self.get(f)).strip() for f in ["first_name", "last_name"]]))

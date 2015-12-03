@@ -55,7 +55,7 @@
         {% } %}
         {% if(contact_list[i].personal_mobileno) { %}
              {% for(var p=0, le=contact_list[i].personal_mobileno.length; p<le; p++) { %}
-             <div class="row"><div class="col-xs-4"><label>{%= __("Mobile No.") %}</label>:</div> <div class="col-xs-8">{%= contact_list[i].personal_mobileno[p] %}</div></div>
+             <div class="row"><div class="col-xs-4"><label>{%= __("Mobile No.") %}</label>:</div> <div class="col-xs-8">{%= contact_list[i].personal_code[p] %}{%= contact_list[i].personal_mobileno[p] %}</div></div>
             {% } %}
         {% } %}
         {% if(contact_list[i].official_emailid) { %}
@@ -71,7 +71,7 @@
         {% } %}
         {% if(contact_list[i].official_mobileno) { %}
          <div class="row"><div class="col-xs-4">{% for(var p=0, le=contact_list[i].official_mobileno.length; p<le; p++) { %}
-            <label>{%= __("Mobile No.") %}</label>:</div> <div class="col-xs-8">{%= contact_list[i].official_mobileno[p] %}</div></div>
+            <label>{%= __("Mobile No.") %}</label>:</div> <div class="col-xs-8">{%= contact_list[i].official_code[p] %}{%= contact_list[i].official_mobileno[p] %}</div></div>
             {% } %}
         {% } %}
         </div>
