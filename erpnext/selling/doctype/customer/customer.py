@@ -58,10 +58,10 @@ class Customer(TransactionBase):
 		self.flags.is_new_doc = self.is_new()
 		validate_party_accounts(self)
 		self.validate_promoters()
-		self.validate_cin()
 		self.validate_pan()
 		self.validate_pan_number(self.pan_number)
 		if self.cin_number:
+			self.validate_cin()
 			self.validate_cin_number(self.cin_number)
 
 	def validate_cin(self):
