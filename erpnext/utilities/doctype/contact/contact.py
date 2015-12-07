@@ -50,7 +50,7 @@ class Contact(StatusUpdater):
 
 	def validate_childtable_entry(self):
 		if not self.get('contacts'):
-			frappe.msgprint("At least one entry is necessary in Contact Details child table",raise_exception=1)
+			frappe.msgprint("At least one entry is mandatory in Contact Details child table",raise_exception=1)
 
 	def set_user(self):
 		if not self.user and self.email_id:
@@ -83,7 +83,7 @@ class Contact(StatusUpdater):
 				if d.preffered == 1:
 					count = count + 1
 			if cint(count)>1:
-				frappe.msgprint("Only one contact details must be preferred as primary details",raise_exception=1)
+				frappe.msgprint("Only one contact details must be preferred as Primary details",raise_exception=1)
 			elif cint(count)<1:
 				frappe.msgprint(" At least one contact must be selected as preferred primary details",raise_exception=1)
 

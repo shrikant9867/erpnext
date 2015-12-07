@@ -81,7 +81,7 @@ class Customer(TransactionBase):
 				if d.p_name not in promoters_list:
 					promoters_list.append(d.p_name)
 				else:
-					frappe.msgprint("Duplicate promoter name is not allowed",raise_exception=1)
+					frappe.msgprint("Duplicate Promoter name is not allowed",raise_exception=1)
 					break
 
 	def validate_pan_number(self,pan_number):
@@ -97,7 +97,7 @@ class Customer(TransactionBase):
 					else:
 						frappe.msgprint("PAN number letters  from possition 6-9 must be numeric",raise_exception=1)
 			else:
-				frappe.msgprint("First five characters of PAN number must be letters",raise_exception=1)
+				frappe.msgprint("First five Characters of PAN number must be letters",raise_exception=1)
 		else:
 			frappe.msgprint("PAN No. must be consist of 10 Digits.",raise_exception=1)
 

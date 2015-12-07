@@ -50,17 +50,19 @@ frappe.ui.form.on("Contact", {
 
 cur_frm.cscript.email_id = function(doc,cdt,cdn){
 	var d = locals[cdt][cdn];
-	var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+	var reg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 	if (reg.test(d.email_id) == false) 
 	{
 	    msgprint('Invalid Email Address');
+	    d.email_id=''
+	    refresh_field('contacts');
 	}
 }
 
 cur_frm.cscript.mobile_no = function(doc,cdt,cdn){
 	var d = locals[cdt][cdn];
 	if(isNaN(d.mobile_no)==true){
-		msgprint("Mobile number must be consist of omly digits")
+		msgprint("Mobile number must be consist of only Digits")
 		d.mobile_no=''
 		refresh_field('contacts');
 	}
