@@ -193,7 +193,7 @@ cur_frm.cscript.promoters_percentage = function(doc,cdt,cdn){
 		console.log("hi")
 	}
 	else{
-		msgprint("Percentage value must be less than 100%")
+		msgprint("Percentage value must be greater than 0% and less than 100%")
 		d.promoters_percentage=''
 		refresh_field('promoters_details')
 	}
