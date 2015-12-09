@@ -30,24 +30,7 @@ frappe.ui.form.on("Contact", {
 	}
 });
 
-
-// cur_frm.cscript.skype_id = function(doc,cdt,cdn){
-// 	var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-// 	if (reg.test(doc.skype_id) == false) 
-// 	{
-// 	    msgprint('Invalid Skype ID');
-// 	}
-// }
-
-
-// cur_frm.cscript.linkedin_id = function(doc,cdt,cdn){
-// 	var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-// 	if (reg.test(doc.linkedin_id) == false) 
-// 	{
-// 	    msgprint('Invalid linkedin ID');
-// 	}
-// }
-
+// Validate Email ID..........................................
 cur_frm.cscript.email_id = function(doc,cdt,cdn){
 	var d = locals[cdt][cdn];
 	var reg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -59,6 +42,7 @@ cur_frm.cscript.email_id = function(doc,cdt,cdn){
 	}
 }
 
+// Validate Email ID.................................................
 cur_frm.cscript.mobile_no = function(doc,cdt,cdn){
 	var d = locals[cdt][cdn];
 	if(isNaN(d.mobile_no)==true){
@@ -75,6 +59,7 @@ cur_frm.cscript.mobile_no = function(doc,cdt,cdn){
 	}
 }
 
+// Valdate mobile no with respect to its digits according to the country specified.........................
 cur_frm.cscript.country_name = function(doc,cdt,cdn){
 	var d = locals[cdt][cdn];
 	if(d.mobile_no){
@@ -86,6 +71,7 @@ cur_frm.cscript.country_name = function(doc,cdt,cdn){
 	}
 }
 
+// Trigger on addition of new row in contcat details child table.....
 cur_frm.cscript.contacts_add = function(doc,cdt,cdn){
 	var d = locals[cdt][cdn]
 	

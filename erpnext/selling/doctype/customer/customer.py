@@ -23,6 +23,7 @@ class Customer(TransactionBase):
 		load_address_and_contact(self, "customer")
 		import time
 		todays_date = datetime.datetime.strptime(cstr(nowdate()),'%Y-%m-%d')
+		# Show popup if financial data is not updated after the 6 month of every fiscal year.
 		if todays_date.month > 6:
 			self.get_financial_data()
 

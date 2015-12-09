@@ -42,7 +42,7 @@ class Contact(StatusUpdater):
 		if self.get('contacts'):
 			for d in self.get('contacts'):
 				if d.preffered == 1:
-					self.country_code = d.country_code
+					self.country_code = d.country_name
 					self.email = d.email_id
 					self.mobile = d.mobile_no
 					self.landline = d.landline
