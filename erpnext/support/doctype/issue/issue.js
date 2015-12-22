@@ -17,3 +17,36 @@ frappe.ui.form.on("Issue", {
 		}
 	}
 });
+
+frappe.ui.form.on("Issue", "onload",function(frm){
+	return frappe.call({
+		method: "erpnext.support.doctype.issue.issue.get_jobseekers_list",
+		args: {
+			"doc":cur_frm.doc
+		},
+		callback: function(r){
+			console.log(r.message)
+			if(r.message){
+				cur_frm.set_value("job_seekers",r.message)	
+				cur_frm.set_value("raised_by",r.message)
+			}
+		}	
+	})
+})
+
+
+frappe.ui.form.on("Issue", "onload",function(frm){
+	return frappe.call({
+		method: "erpnext.support.doctype.issue.issue.get_email",
+		args: {
+			"doc":cur_frm.doc
+		},
+		callback: function(r){
+			console.log(r.message)
+			if(r.message){
+				cur_frm.set_value("raised_by",r.message)
+				refresh.field("raised_by")
+			}
+		}	
+	})
+})

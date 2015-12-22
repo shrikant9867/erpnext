@@ -175,5 +175,5 @@ class TestTask(unittest.TestCase):
 		task.status = "Closed"
 		task.save()
 		todo = get_owner_and_status()
-		self.assertEquals(todo.owner, "test@example.com")
+		self.asspertEquals(todo.owner, "test@example.com")
 		self.assertEquals(todo.status, "Closed")
