@@ -10,9 +10,10 @@ from frappe.utils import flt, cint, cstr , nowdate
 
 class Contact(StatusUpdater):
 	def autoname(self):
-
-		count = frappe.db.sql("""select name from `tabContact` where first_name='%s' and last_name='%s' """%(self.first_name,self.last_name),as_list=1,debug=1)
-
+		if self.first_name and self.last_name:
+			count = frappe.db.sql("""select name from `tabContact` where first_name='%s' and last_name='%s' """%(self.first_name,self.last_name),as_list=1)
+		else:
+			count = frappe.db.sql("""select name from `tabContact` where first_name='%s' """%(self.first_name),as_list=1)
 		number = cint(len(count)) + 1
 		name = " ".join(filter(None,
 			[cstr(self.get(f)).strip() for f in ["first_name", "last_name"]]))
@@ -41,7 +42,7 @@ class Contact(StatusUpdater):
 		if self.get('contacts'):
 			for d in self.get('contacts'):
 				if d.preffered == 1:
-					self.country_code = d.country_code
+					self.country_code = d.country_name
 					self.email = d.email_id
 					self.mobile = d.mobile_no
 					self.landline = d.landline
@@ -49,7 +50,7 @@ class Contact(StatusUpdater):
 
 	def validate_childtable_entry(self):
 		if not self.get('contacts'):
-			frappe.msgprint("At least one entry is necessary in Contact Details child table",raise_exception=1)
+			frappe.msgprint("At least one entry is mandatory in Contact Details child table",raise_exception=1)
 
 	def set_user(self):
 		if not self.user and self.email_id:
@@ -82,7 +83,7 @@ class Contact(StatusUpdater):
 				if d.preffered == 1:
 					count = count + 1
 			if cint(count)>1:
-				frappe.msgprint("Only one contact details must be preferred as primary details",raise_exception=1)
+				frappe.msgprint("Only one contact details must be preferred as Primary details",raise_exception=1)
 			elif cint(count)<1:
 				frappe.msgprint(" At least one contact must be selected as preferred primary details",raise_exception=1)
 

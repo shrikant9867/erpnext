@@ -25,7 +25,7 @@ def load_address_and_contact(doc, key):
 			fields="*", filters={key: doc.customer},
 			order_by="is_primary_contact desc, modified desc")
 	
-	if doc.doctype != "Lead":
+	if doc.doctype != "Lead" and doc.doctype != "Supplier":
 			doc.get("__onload").financial_list = frappe.get_all("Financial Data",
 				fields="*", filters={key: doc.name},order_by="financial_year desc",limit_page_length=1)
 

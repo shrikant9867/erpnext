@@ -23,6 +23,7 @@ class Customer(TransactionBase):
 		load_address_and_contact(self, "customer")
 		import time
 		todays_date = datetime.datetime.strptime(cstr(nowdate()),'%Y-%m-%d')
+		# Show popup if financial data is not updated after the 6 month of every fiscal year.
 		if todays_date.month > 6:
 			self.get_financial_data()
 
@@ -58,10 +59,10 @@ class Customer(TransactionBase):
 		self.flags.is_new_doc = self.is_new()
 		validate_party_accounts(self)
 		self.validate_promoters()
-		self.validate_cin()
 		self.validate_pan()
 		self.validate_pan_number(self.pan_number)
 		if self.cin_number:
+			self.validate_cin()
 			self.validate_cin_number(self.cin_number)
 
 	def validate_cin(self):
@@ -97,7 +98,7 @@ class Customer(TransactionBase):
 					else:
 						frappe.msgprint("PAN number letters  from possition 6-9 must be numeric",raise_exception=1)
 			else:
-				frappe.msgprint("First five characters of PAN number must be letters",raise_exception=1)
+				frappe.msgprint("First five Characters of PAN number must be letters",raise_exception=1)
 		else:
 			frappe.msgprint("PAN No. must be consist of 10 Digits.",raise_exception=1)
 

@@ -10,12 +10,6 @@ cur_frm.cscript.onload = function(doc, cdt, cdn) {
 		cur_frm.fields_dict.supplier.get_query = erpnext.queries.supplier;
 	}
 
-	if(cur_frm.doc.doctype==="Project Commercial"){
-		//alert(cur_frm.doc.doctype)
-		cur_frm.set_value("customer", $('input[data-fieldname=customer_nm]').val());
-		//cur_frm.set_value("customer_name", $('input[data-fieldname=customer_nm]').val());
-	}
-
 	if(cur_frm.fields_dict.lead) {
 		cur_frm.fields_dict.lead.get_query = erpnext.queries.lead;
 		cur_frm.add_fetch('lead', 'lead_name', 'lead_name');
@@ -38,9 +32,14 @@ cur_frm.cscript.onload = function(doc, cdt, cdn) {
 						cur_frm.set_value("customer_name", refdoc.customer_name);
 						if(cur_frm.doc.doctype==="Address")
 							cur_frm.set_value("address_title", cur_frm.doc.customer_name);
-						if(cur_frm.doc.doctype==="Financial Data")
+						if(cur_frm.doc.doctype==="Financial Data"){
 							cur_frm.set_value("customer", refdoc.customer || refdoc.name);
 							cur_frm.set_value("customer_name", refdoc.customer_name);
+							cur_frm.set_value("currency",refdoc.currency)
+							cur_frm.set_value("country",refdoc.country)
+						}
+						
+
 				}
 			}
 			if(["Supplier", "Supplier Quotation", "Purchase Order", "Purchase Invoice", "Purchase Receipt"]

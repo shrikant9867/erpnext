@@ -36,23 +36,16 @@ frappe.ui.form.on("Customer", "refresh", function(frm) {
 cur_frm.cscript.onload = function(doc, dt, dn) {
 	cur_frm.cscript.load_defaults(doc, dt, dn);
 }
+
+// Validate CIN Number
 cur_frm.cscript.cin_number =  function(doc,cdt,cdn){
 	
 	$c('runserverobj', args={'method':'validate_cin_number', 'arg': doc.cin_number, 'docs': doc}, function(r,rt) {
 		//cur_frm.refresh();
 	});
-
-	var isnum = /^\d+$/.test(doc.cin_number);
-	var reg = /^[a-zA-Z0-9_]*$/
-	if(reg.test(doc.cin_number) == false) {
-		msgprint('CIN No. must be Alphanumeric.')
-	}
-
-	if(isnum==true){
-		msgprint('CIN No. must be combination of Digits and Characters.')
-	}
 }
 
+//Validate PAN Number
 cur_frm.cscript.pan_number =  function(doc,cdt,cdn){
 
 	$c('runserverobj', args={'method':'validate_pan_number', 'arg': doc.pan_number, 'docs': doc}, function(r,rt) {
@@ -90,11 +83,13 @@ cur_frm.cscript.load_defaults = function(doc, dt, dn) {
 cur_frm.add_fetch('lead_name', 'company_name', 'customer_name');
 cur_frm.add_fetch('default_sales_partner','commission_rate','default_commission_rate');
 cur_frm.add_fetch('p_name', 'contact', 'contact');
+cur_frm.add_fetch('currency','symbol','currency_symbol');
 
 cur_frm.cscript.validate = function(doc, dt, dn) {
 	if(doc.lead_name) frappe.model.clear_doc("Lead", doc.lead_name);
 }
 
+//Showing FFWW, Financial Data, PRoject Commercial on customer form (Dashboard)...........
 cur_frm.cscript.setup_dashboard = function(doc) {
 	cur_frm.dashboard.reset(doc);
 	if(doc.__islocal)
@@ -137,11 +132,56 @@ cur_frm.cscript.setup_dashboard = function(doc) {
 	
 }
 
+cur_frm.fields_dict['industry_group'].get_query = function(doc, dt, dn) {
+	if(doc.sector){
+		return{
+			filters:{'sector': doc.sector}
+		}
+	}
+	else{
+		msgprint("First select the Sector.")
+		doc.industry_group =''
+		refresh_field('industry_group')
+	}
+}
+
+cur_frm.fields_dict['industry'].get_query = function(doc, dt, dn) {
+	if(doc.industry_group){
+		return{
+			filters:{'sector': doc.sector,
+					'industry_group': doc.industry_group
+					}
+		}
+	}
+	else{
+		msgprint("First select the Industry Group.")
+		doc.industry =''
+		refresh_field('industry')
+	}
+}
+
+cur_frm.fields_dict['sub_industry'].get_query = function(doc, dt, dn) {
+	if(doc.industry){
+		return{
+			filters:{'sector': doc.sector,
+					'industry_group': doc.industry_group,
+					'industry': doc.industry
+					}
+		}
+	}
+	else{
+		msgprint("First select the Industry.")
+		doc.sub_industry =''
+		refresh_field('sub_industry')
+	}
+}
+
 cur_frm.fields_dict['customer_group'].get_query = function(doc, dt, dn) {
 	return{
 		filters:{'is_group': 'No'}
 	}
 }
+
 
 cur_frm.fields_dict.lead_name.get_query = function(doc, cdt, cdn) {
 	return{
@@ -172,27 +212,24 @@ cur_frm.fields_dict['accounts'].grid.get_field('account').get_query = function(d
 	}
 }
 
-
-// cur_frm.fields_dict['promoters_details'].grid.get_field('p_name').get_query = function(doc, cdt, cdn) {
-// 	return{	query: "mycfo.mycfo.doctype.financial_data.financial_data.get_promoters" }
-// }
-
+//validate Date Of Incorporation........................................................
 cur_frm.cscript.date_of_incorporation = function(doc,cdt,cdn){
 	var today = new Date();
 	if(today<new Date(doc.date_of_incorporation)){
-		msgprint("Date of incorporation must be less than the Future Date")
+		msgprint("Date of incorporation should not be Future Date")
 		doc.date_of_incorporation=''
 		refresh_field('date_of_incorporation')
 	}
 }
 
+//Validate Promoters Percentage...............................................................
 cur_frm.cscript.promoters_percentage = function(doc,cdt,cdn){
 	var d = locals[cdt][cdn]
 	if(d.promoters_percentage>0 && d.promoters_percentage<=100){
 		console.log("hi")
 	}
 	else{
-		msgprint("Percentage value must be less than 100%")
+		msgprint("Percentage value must be greater than 0% and less than 100%")
 		d.promoters_percentage=''
 		refresh_field('promoters_details')
 	}
