@@ -4,8 +4,8 @@
 from __future__ import unicode_literals
 import frappe
 import json
+import itertools
 from frappe import _
-
 from frappe.model.document import Document
 from frappe.utils import now
 from frappe.utils.user import is_website_user
@@ -70,6 +70,22 @@ def get_issue_list(doctype, txt, filters, limit_start, limit_page_length=20):
 		ignore_permissions = True
 
 	return get_list(doctype, txt, filters, limit_start, limit_page_length, ignore_permissions=ignore_permissions)
+
+@frappe.whitelist()
+def get_jobseekers_list(doc):
+	js = frappe.db.sql("""select email from `tabUser`t1,`tabUserRole`t2 where t1.name = t2.parent and t2.role = "Job Seekers" """,as_list=1)
+	user = frappe.session.user
+	chain = itertools.chain(*js)
+	if user in list(chain):
+		return user
+
+@frappe.whitelist()
+def get_email(doc):
+	customer = frappe.db.sql("""select email from `tabUser`t1,`tabUserRole`t2  where t1.name = t2.parent and t2.role = "Customer" """,as_list=1)
+	user = frappe.session.user
+	chain = itertools.chain(*customer)
+	if user in list(chain):
+		return user
 
 @frappe.whitelist()
 def set_status(name, status):
