@@ -31,7 +31,8 @@
         <label>{%= __("Email") %}</label>:</div> <div class="col-xs-8">{%= contact_list[i].email %}</div></div>
         {% } %}
         <div class="row"><div class="col-xs-4">{% if(contact_list[i].mobile) { %}
-        <label>{%= __("Mobile") %}</label>:</div> <div class="col-xs-8">{%= contact_list[i].country_code %}{%= contact_list[i].mobile %}</div></div>
+        <label>{%= __("Mobile") %}</label>:</div> <div class="col-xs-8">{%= contact_list[i].
+        actual_country_code %}-{%= contact_list[i].mobile %}</div></div>
         {% } %}
         {% if(contact_list[i].linkedin_id) { %}<div class="row"><div class="col-xs-4">
         <label>{%= __("Linkedein Id") %}</label>:</div> <div class="col-xs-8">{%= contact_list[i].linkedin_id %}</div></div>
