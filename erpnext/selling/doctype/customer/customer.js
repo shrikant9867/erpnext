@@ -31,6 +31,11 @@ frappe.ui.form.on("Customer", "refresh", function(frm) {
 	grid.set_column_disp("allocated_amount", false);
 	grid.set_column_disp("incentives", false);
 
+	if (frappe.get_prev_route() && (inList(["Financial Data", "FFWW", "Operational Matrix"], frappe.get_prev_route()[0]))){
+			frappe.ui.toolbar.clear_cache()
+			//console.log("hiihih")	
+	}
+
 })
 
 cur_frm.cscript.onload = function(doc, dt, dn) {
