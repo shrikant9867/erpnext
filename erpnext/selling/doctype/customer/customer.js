@@ -30,11 +30,7 @@ frappe.ui.form.on("Customer", "refresh", function(frm) {
 	var grid = cur_frm.get_field("sales_team").grid;
 	grid.set_column_disp("allocated_amount", false);
 	grid.set_column_disp("incentives", false);
-
-	if (frappe.get_prev_route() && (inList(["Financial Data", "FFWW", "Operational Matrix"], frappe.get_prev_route()[0]))){
-			frappe.ui.toolbar.clear_cache()
-			//console.log("hiihih")	
-	}
+	
 
 })
 
