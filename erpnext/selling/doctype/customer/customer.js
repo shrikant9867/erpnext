@@ -98,7 +98,7 @@ cur_frm.cscript.setup_dashboard = function(doc) {
 	var status = ''
 
 	cur_frm.dashboard.add_doctype_badge("Financial Data", "customer");
-	//cur_frm.dashboard.add_doctype_badge("FFWW Details", "customer");
+	// cur_frm.dashboard.add_doctype_badge("Customer Skill Mapping", "customer");
 	cur_frm.dashboard.add_page_badge("FFWW","customer");
 	cur_frm.dashboard.add_page_badge("Operational Matrix","customer");
 	cur_frm.dashboard.add_page_badge("Project Commercial","customer");
@@ -235,3 +235,5 @@ cur_frm.cscript.promoters_percentage = function(doc,cdt,cdn){
 		refresh_field('promoters_details')
 	}
 }
+
+{% include 'mycfo/mycfo/custom_customer.js' %}
