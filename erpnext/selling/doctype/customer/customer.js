@@ -1,6 +1,8 @@
 // Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 // License: GNU General Public License v3. See license.txt
 
+{% include 'mycfo/doctype/el_sign_off_details/el_sign_off_details.js' %};
+
 frappe.ui.form.on("Customer", "refresh", function(frm) {
 	cur_frm.cscript.setup_dashboard(frm.doc);
 
@@ -9,6 +11,8 @@ frappe.ui.form.on("Customer", "refresh", function(frm) {
 	} else {
 		erpnext.toggle_naming_series();
 	}
+
+	//
 
 	if(!frm.doc.__islocal) {
 			frm.add_custom_button(__("ADD FFWW / CONTACT"), function() {
