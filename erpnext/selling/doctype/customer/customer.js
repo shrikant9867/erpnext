@@ -12,6 +12,8 @@ frappe.ui.form.on("Customer", "refresh", function(frm) {
 		erpnext.toggle_naming_series();
 	}
 
+	//
+
 	if(!frm.doc.__islocal) {
 			frm.add_custom_button(__("ADD FFWW / CONTACT"), function() {
 				frappe.model.open_mapped_doc({
