@@ -88,7 +88,7 @@ class Customer(TransactionBase):
 	def validate_pan_number(self,pan_number):
 		import re
 		pattern = r'[A-Z]'
-		if len(self.pan_number) == 10:
+		if self.pan_number and len(self.pan_number) == 10:
 			if self.pan_number[0:5].isalpha():
 					if self.pan_number[5:9].isdigit():
 						if self.pan_number[-1].isalpha():
